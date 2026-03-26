@@ -359,9 +359,9 @@
                         <div class="card-body-modern">
                             <div class="table-container">
                                 <table class="table-modern w-100" id="managerComparisonTable">
-                                    <thead><tr><th>Rank</th><th>Manager</th><th>Actual Revenue</th><th>Target Revenue</th><th>Variance (R)</th><th>Variance %</th><th>Progress</th><th>Status</th></tr></thead>
-                                    <tbody id="managerComparisonBody"><tr><td colspan="8" class="text-center">Loading...</td></tr></tbody>
-                                </table>
+                                    <thead>32<th>Rank</th><th>Manager</th><th>Actual Revenue</th><th>Target Revenue</th><th>Variance (R)</th><th>Variance %</th><th>Progress</th><th>Status</th>60</thead>
+                                    <tbody id="managerComparisonBody">67<td colspan="8" class="text-center">Loading...67</tbody>
+                                 </table>
                             </div>
                         </div>
                     </div>
@@ -376,9 +376,9 @@
                         <div class="card-body-modern">
                             <div class="table-container">
                                 <table class="table-modern w-100" id="projectTimelineTable">
-                                    <thead><tr><th>Project Name</th><th>Manager</th><th>Start Date</th><th>End Date</th><th>Time Progress</th><th>Status</th></tr></thead>
-                                    <tbody id="projectTimelineBody"><tr><td colspan="6" class="text-center">Loading...</td></tr></tbody>
-                                </table>
+                                    <thead>32<th>Project Name</th><th>Manager</th><th>Start Date</th><th>End Date</th><th>Time Progress</th><th>Status</th>60</thead>
+                                    <tbody id="projectTimelineBody">67<td colspan="6" class="text-center">Loading...67</tbody>
+                                 </table>
                             </div>
                         </div>
                     </div>
@@ -463,65 +463,359 @@
                     <div class="row mt-3"><div class="col-12"><button type="submit" class="btn btn-primary rounded-pill px-4"><i class="fas fa-save me-2"></i>Save Invoice</button></div></div>
                 </form>
                 <hr><h6 class="fw-semibold">Today's Invoices Summary</h6>
-                <div class="table-container"><table class="table-modern w-100" id="todayInvoicesTable"><thead><tr><th>Project</th><th>Manager</th><th>Amount</th><th>Payment Status</th><th>Time</th></tr></thead><tbody></tbody></table></div>
+                <div class="table-container"><table class="table-modern w-100" id="todayInvoicesTable"><thead>32<th>Project</th><th>Manager</th><th>Amount</th><th>Payment Status</th><th>Time</th>60</thead><tbody></tbody> </table></div>
             </div></div>
         </div>
         
         <!-- Order Book Tab -->
-        <div id="orderbook" class="tab-pane"><div class="card-modern"><div class="card-header-modern"><i class="fas fa-book"></i> Order Book - All Projects from Projects Sheet</div><div class="card-body-modern"><div class="table-container"><table class="table-modern w-100" id="orderBookTable"><thead id="orderBookHeader"></thead><tbody id="orderBookBody"></tbody></table></div></div></div></div>
+        <div id="orderbook" class="tab-pane"><div class="card-modern"><div class="card-header-modern"><i class="fas fa-book"></i> Order Book - All Projects from Projects Sheet</div><div class="card-body-modern"><div class="table-container"><table class="table-modern w-100" id="orderBookTable"><thead id="orderBookHeader"></thead><tbody id="orderBookBody"></tbody> </table></div></div></div></div>
         
         <!-- Performance Tab -->
-        <div id="performance" class="tab-pane"><div class="card-modern"><div class="card-header-modern"><i class="fas fa-chart-simple"></i> Performance Analysis</div><div class="card-body-modern"><div id="perfChart" class="chart-container"></div><div class="table-container mt-4"><table class="table-modern w-100" id="perfTable"><thead><tr><th>Manager</th><th>Actual</th><th>Target</th><th>Achievement</th><th>Quality</th><th>Safety</th><th>Status</th></tr></thead><tbody></tbody></table></div></div></div></div>
+        <div id="performance" class="tab-pane"><div class="card-modern"><div class="card-header-modern"><i class="fas fa-chart-simple"></i> Performance Analysis</div><div class="card-body-modern"><div id="perfChart" class="chart-container"></div><div class="table-container mt-4"><table class="table-modern w-100" id="perfTable"><thead>32<th>Manager</th><th>Actual</th><th>Target</th><th>Achievement</th><th>Quality</th><th>Safety</th><th>Status</th>60</thead><tbody></tbody> </table></div></div></div></div>
     </div>
     <div class="refresh-btn" onclick="loadAllData()"><i class="fas fa-sync-alt"></i></div>
 
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
     
-
-<script>
-const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzNj3xM399_RJwW-5XUsscD9jQ2o1LUGHfnv3nuGhjEaHc1TIsvUDSJ5Ndsss0DoePPgA/exec";
-
-async function apiGet(action) {
-    const res = await fetch(`${WEB_APP_URL}?action=${action}`);
-    return await res.json();
-}
-
-async function apiPost(payload) {
-    const res = await fetch(WEB_APP_URL, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload)
-    });
-    return await res.json();
-}
-
-// ===== PROJECT =====
-async function addProject(data) {
-    return await apiPost({ action: "addProject", ...data });
-}
-
-async function loadProjects() {
-    return await apiGet("getProjects");
-}
-
-// ===== REVENUE =====
-async function addRevenue(data) {
-    return await apiPost({ action: "addRevenue", ...data });
-}
-
-async function loadRevenue() {
-    return await apiGet("getRevenue");
-}
-
-// ===== INVOICE =====
-async function addInvoice(data) {
-    return await apiPost({ action: "addInvoice", ...data });
-}
-
-async function loadInvoices() {
-    return await apiGet("getInvoices");
-}
-</script>
-
+    <script>
+    // ==================== FIXED: GOOGLE SHEETS CONFIGURATION ====================
+    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzgdAXcYq_W24Rd1ASRs1geXThdvoVXZ8vfuCLxp5Ij79ZXhVPFWgCJyy0we0M5UrSK-w/exec";
+    
+    // Project Managers and Names Lists
+    const PROJECT_MANAGERS = ["Moses", "Johan", "Siyanda", "Dave", "James", "Rayman", "Timothy", "Roads Site Agent COT", "Civil Site Agent", "Roads Site Agent CPT", "Brian", "EL CM", "Stanley", "Tony", "Govern", "Graham", "Ronald", "Petros", "Elroy", "Mesh", "Vusi", "Tinotenda", "Sydney", "Andrew", "Phillip", "Moeti"];
+    const PROJECT_NAMES = ["DBSA Generators", "DBSA Rooiwal", "Joe Gqabi", "Temba", "Midvaal", "Coega", "KZN General Buildings", "Tshwane", "Public Works Limpopo", "Limpopo Eskom Substation Ephraim Mogale", "Naizna", "Cape Town", "COT Streetlights", "COT Electrification", "COT Metering", "COE Streetlights", "Msunduzi E50", "Msunduzi Streetlights", "Msunduzi E33", "Msunduzi E47", "Moqhaka Streetlights", "Moqhaka Metering", "Centlec CD11", "Centlec Transformers CD32", "Centlec CD45", "Midvaal Mechanical", "Eskom SPU", "Eskom FSOU Substation", "Eskom ECOU", "Eskom LOU General Buildings", "Eskom KZN Minor Reticulation", "Randwest Electrical", "Randwest Roads & Stormwater", "Randwest Water rand sanitation", "Randwest Bulk", "RAL", "Stellenbosh", "Liquid ECPG", "Liquid ECSOD", "Liquid Gauteng SOD", "Telkom", "MTN", "Centlec", "Eskom Harvard", "City Power", "Umhlathuze Municipality", "Eskom WC", "COE Buildings", "Uthukela", "Kgetleng River", "Ray Nkonyeni Facility", "Ray Nkonyeni Electrical Material", "Ray Nkonyeni Mast", "Ray Nkonyeni Meter Reading", "Ramotshere Electrical Supplies", "Newcastle Substations", "Ubuntu", "IDT North West Buidlings", "Amajuba Generator", "uPhongolo", "Abaquilisi Battery Supplies", "Abaquilisi Streetlights"];
+    
+    let projects = [], dailyEntries = [], invoices = [];
+    let currentDashboardPeriod = 'daily', currentRevenueChartPeriod = 'daily', currentPieChartPeriod = 'daily', currentManagerPeriod = 'daily', currentManagerComparisonPeriod = 'daily';
+    
+    function showLoading(msg) { document.getElementById('loadingOverlay').style.display = 'flex'; document.getElementById('loadingMessage').innerText = msg; }
+    function hideLoading() { document.getElementById('loadingOverlay').style.display = 'none'; }
+    const formatCurrency = (v) => 'R ' + Math.round(v || 0).toLocaleString();
+    const parseNumber = (v) => Number(String(v).replace(/[^0-9.-]+/g, '')) || 0;
+    
+    // ==================== FIXED: API FUNCTIONS WITH CORRECT DATA STRUCTURE ====================
+    async function apiGet(action) {
+        const res = await fetch(`${WEB_APP_URL}?action=${action}&_=${Date.now()}`);
+        return await res.json();
+    }
+    
+    async function apiPost(payload) {
+        const res = await fetch(WEB_APP_URL, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload)
+        });
+        return await res.json();
+    }
+    
+    // ===== PROJECT FUNCTIONS =====
+    async function addProject() {
+        const data = {
+            costCentre: document.getElementById("p_costCentre").value,
+            manager: document.getElementById("p_manager").value,
+            projectName: document.getElementById("p_projectName").value,
+            status: document.getElementById("p_status").value,
+            totalIncome: parseFloat(document.getElementById("p_totalIncome").value) || 0,
+            margin: parseFloat(document.getElementById("p_margin").value) || 25
+        };
+        
+        if(!data.projectName) { alert("Please enter Project Name"); return; }
+        if(!data.manager) { alert("Please select Manager"); return; }
+        if(data.totalIncome <= 0) { alert("Please enter Total Income"); return; }
+        
+        const btn = document.querySelector('#projectForm button[type="submit"]');
+        const originalText = btn.innerHTML;
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Saving...';
+        btn.disabled = true;
+        
+        try {
+            const result = await apiPost({ action: "addProject", data: data });
+            if (result.success) {
+                alert("✅ Project saved successfully!");
+                await loadAllData();
+                document.getElementById("p_projectName").value = "";
+                document.getElementById("p_totalIncome").value = "";
+            } else {
+                alert("❌ Error: " + (result.error || "Unknown error"));
+            }
+        } catch (error) {
+            alert("❌ Failed to connect: " + error.message);
+        } finally {
+            btn.innerHTML = originalText;
+            btn.disabled = false;
+        }
+    }
+    
+    async function loadProjects() {
+        const result = await apiGet("getProjects");
+        return result.success ? (result.data || []) : [];
+    }
+    
+    // ===== REVENUE FUNCTIONS =====
+    async function addRevenue() {
+        const data = {
+            date: document.getElementById("rev_date").value || new Date().toISOString().split('T')[0],
+            costCentre: document.getElementById("p_costCentre")?.value || "Onpoint Group",
+            manager: document.getElementById("rev_manager").value,
+            projectName: document.getElementById("rev_projectName").value,
+            amount: parseFloat(document.getElementById("rev_amount").value) || 0,
+            quality: parseInt(document.getElementById("rev_quality").value) || 80,
+            safety: parseInt(document.getElementById("rev_safety").value) || 0
+        };
+        
+        if(!data.manager) { alert("Please select Manager"); return; }
+        if(!data.projectName) { alert("Please select Project"); return; }
+        if(data.amount <= 0) { alert("Please enter Revenue amount"); return; }
+        
+        const btn = document.querySelector('#revenueForm button[type="submit"]');
+        const originalText = btn.innerHTML;
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Saving...';
+        btn.disabled = true;
+        
+        try {
+            const result = await apiPost({ action: "addRevenue", data: data });
+            if (result.success) {
+                alert("✅ Revenue saved successfully!");
+                await loadAllData();
+                document.getElementById("rev_amount").value = "";
+                document.getElementById("rev_safety").value = "0";
+            } else {
+                alert("❌ Error: " + (result.error || "Unknown error"));
+            }
+        } catch (error) {
+            alert("❌ Failed to connect: " + error.message);
+        } finally {
+            btn.innerHTML = originalText;
+            btn.disabled = false;
+        }
+    }
+    
+    async function loadRevenue() {
+        const result = await apiGet("getRevenue");
+        return result.success ? (result.data || []) : [];
+    }
+    
+    // ===== INVOICE FUNCTIONS =====
+    async function addInvoice() {
+        const data = {
+            date: document.getElementById("inv_date").value || new Date().toISOString().split('T')[0],
+            manager: document.getElementById("inv_manager").value,
+            projectName: document.getElementById("inv_projectName").value,
+            amount: parseFloat(document.getElementById("inv_amount").value) || 0,
+            paymentReceived: document.getElementById("inv_paid").checked,
+            paymentDate: document.getElementById("inv_paymentDate").value || ""
+        };
+        
+        if(!data.manager) { alert("Please select Manager"); return; }
+        if(!data.projectName) { alert("Please select Project"); return; }
+        if(data.amount <= 0) { alert("Please enter Invoice amount"); return; }
+        
+        const btn = document.querySelector('#invoiceForm button[type="submit"]');
+        const originalText = btn.innerHTML;
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Saving...';
+        btn.disabled = true;
+        
+        try {
+            const result = await apiPost({ action: "addInvoice", data: data });
+            if (result.success) {
+                alert("✅ Invoice saved successfully!");
+                await loadAllData();
+                document.getElementById("inv_amount").value = "";
+                document.getElementById("inv_paid").checked = false;
+                document.getElementById("inv_paymentDate").value = "";
+            } else {
+                alert("❌ Error: " + (result.error || "Unknown error"));
+            }
+        } catch (error) {
+            alert("❌ Failed to connect: " + error.message);
+        } finally {
+            btn.innerHTML = originalText;
+            btn.disabled = false;
+        }
+    }
+    
+    async function loadInvoices() {
+        const result = await apiGet("getInvoices");
+        return result.success ? (result.data || []) : [];
+    }
+    
+    // ==================== UI FUNCTIONS ====================
+    function populateDropdownsStatic() {
+        ['rev_manager', 'inv_manager', 'p_manager'].forEach(id => {
+            let sel = document.getElementById(id);
+            if(sel) {
+                let html = '<option value="">Select Manager</option>';
+                PROJECT_MANAGERS.forEach(m => html += `<option value="${m}">${m}</option>`);
+                sel.innerHTML = html;
+            }
+        });
+        ['rev_projectName', 'inv_projectName'].forEach(id => {
+            let sel = document.getElementById(id);
+            if(sel) {
+                let html = '<option value="">Select Project</option>';
+                PROJECT_NAMES.forEach(p => html += `<option value="${p}">${p}</option>`);
+                sel.innerHTML = html;
+            }
+        });
+    }
+    
+    function initQualityStars() {
+        document.querySelectorAll('#qualityStars .rating-star').forEach(star => {
+            star.addEventListener('click', () => {
+                let score = parseInt(star.dataset.score);
+                document.getElementById('rev_quality').value = score;
+                document.querySelectorAll('#qualityStars .rating-star').forEach(s => s.classList.remove('active'));
+                document.querySelectorAll('#qualityStars .rating-star').forEach(s => { if(parseInt(s.dataset.score) <= score) s.classList.add('active'); });
+            });
+            if(parseInt(star.dataset.score) <= 80) star.classList.add('active');
+        });
+    }
+    
+    function updateDashboard() {
+        let confirmed = projects.filter(p => p.Status === 'Confirmed').reduce((s,p) => s + (p.TotalIncome || 0), 0);
+        let forecast = projects.filter(p => p.Status === 'Forecast').reduce((s,p) => s + (p.TotalIncome || 0), 0);
+        document.getElementById('totalConfirmed').innerHTML = formatCurrency(confirmed);
+        document.getElementById('totalForecast').innerHTML = formatCurrency(forecast);
+        document.getElementById('totalOrderBook').innerHTML = formatCurrency(confirmed + forecast);
+        document.getElementById('groupBTYE').innerHTML = formatCurrency(forecast + (confirmed * 1.5));
+        
+        let mtdActual = dailyEntries.filter(e => new Date(e.date).getMonth() === new Date().getMonth()).reduce((s,e) => s + e.amount, 0);
+        document.getElementById('mtdActual').innerHTML = formatCurrency(mtdActual);
+        
+        let actual = dailyEntries.reduce((s,e) => s + e.amount, 0);
+        let target = projects.reduce((s,p) => s + ((p.TotalIncome || 0) / 12), 0);
+        let ach = target > 0 ? (actual/target)*100 : 0;
+        document.getElementById('periodRevenue').innerHTML = formatCurrency(actual);
+        document.getElementById('periodTarget').innerHTML = formatCurrency(target);
+        document.getElementById('periodProgress').style.width = Math.min(100, ach) + '%';
+        document.getElementById('periodAch').innerHTML = ach.toFixed(0) + '%';
+        
+        let avgQuality = dailyEntries.length ? dailyEntries.reduce((s,e) => s + (e.quality || 80), 0) / dailyEntries.length : 80;
+        document.getElementById('qualityScore').innerHTML = Math.round(avgQuality) + '%';
+        document.getElementById('qualityProgress').style.width = avgQuality + '%';
+        
+        let totalIncidents = dailyEntries.reduce((s,e) => s + (e.safety || 0), 0);
+        document.getElementById('safetyIncidents').innerHTML = totalIncidents;
+        document.getElementById('safetyProgress').style.width = Math.max(0, 100 - (totalIncidents * 10)) + '%';
+        
+        document.getElementById('grossProfit').innerHTML = formatCurrency(actual * 0.3);
+        document.getElementById('gpMargin').innerHTML = projects.length ? (projects.reduce((s,p) => s + (p.Margin || 20), 0) / projects.length).toFixed(0) : '0';
+        document.getElementById('activeProjects').innerHTML = projects.length;
+        document.getElementById('confirmedCount').innerHTML = projects.filter(p => p.Status === 'Confirmed').length;
+        document.getElementById('cashCollected').innerHTML = formatCurrency(actual * 0.65);
+        document.getElementById('collectionRate').innerHTML = '65%';
+    }
+    
+    function updateOrderBook() {
+        let headers = '<th>Division</th><th>Manager</th><th>Project Name</th><th>Status</th><th>Total Income (R)</th><th>Margin %</th><th>Gross Profit (R)</th>';
+        document.getElementById('orderBookHeader').innerHTML = headers;
+        let body = '';
+        projects.forEach(p => {
+            let gp = (p.TotalIncome || 0) * ((p.Margin || 20) / 100);
+            body += `<tr><td>${p.Division || 'Onpoint Group'}</td><td>${p.Manager || 'Unassigned'}</td><td><strong>${p.ProjectName || 'Unknown'}</strong></td><td><span class="badge-${p.Status==='Confirmed'?'success':'warning'}">${p.Status || 'Forecast'}</span></td><td>${formatCurrency(p.TotalIncome || 0)}</td><td>${p.Margin || 20}%</td><td>${formatCurrency(gp)}</td></tr>`;
+        });
+        document.getElementById('orderBookBody').innerHTML = body || '<tr><td colspan="7" class="text-center">No projects</td></tr>';
+    }
+    
+    function updatePerformanceTable() {
+        let mgrMap = {};
+        PROJECT_MANAGERS.forEach(m => { mgrMap[m] = { actual: 0, budget: 0, quality: 0, safety: 0, count: 0 }; });
+        projects.forEach(p => { if(mgrMap[p.Manager]) mgrMap[p.Manager].budget += p.TotalIncome || 0; });
+        dailyEntries.forEach(e => { if(mgrMap[e.manager]) { mgrMap[e.manager].actual += e.amount; mgrMap[e.manager].quality += e.quality || 80; mgrMap[e.manager].safety += e.safety || 0; mgrMap[e.manager].count++; } });
+        let html = '';
+        for(let m in mgrMap) {
+            if(mgrMap[m].budget === 0 && mgrMap[m].actual === 0) continue;
+            let ach = mgrMap[m].budget > 0 ? (mgrMap[m].actual / mgrMap[m].budget) * 100 : 0;
+            let avgQuality = mgrMap[m].count ? mgrMap[m].quality / mgrMap[m].count : 80;
+            let totalIncidents = mgrMap[m].safety;
+            let statusClass = ach >= 80 ? 'badge-success' : ach >= 50 ? 'badge-warning' : 'badge-danger';
+            let statusText = ach >= 80 ? 'On Track' : ach >= 50 ? 'At Risk' : 'Behind';
+            html += `<tr><td><strong>${m}</strong></td><td>${formatCurrency(mgrMap[m].actual)}</td><td>${formatCurrency(mgrMap[m].budget)}</td><td><div class="progress-bar-custom"><div class="progress-fill ${ach >= 80 ? 'green' : ach >= 50 ? 'orange' : 'red'}" style="width:${Math.min(100, ach)}%"></div></div>${ach.toFixed(0)}%</td><td><span class="badge-info">${Math.round(avgQuality)}%</span></td><td><span class="${totalIncidents === 0 ? 'badge-success' : totalIncidents <= 2 ? 'badge-warning' : 'badge-danger'}">${totalIncidents} incidents</span></td><td><span class="${statusClass}">${statusText}</span></td></tr>`;
+        }
+        document.querySelector('#perfTable tbody').innerHTML = html || '<tr><td colspan="7">No data</td></tr>';
+    }
+    
+    function updateTodayInvoicesTable() {
+        let today = new Date().toISOString().split('T')[0];
+        let html = invoices.filter(i => i.date === today).map(inv => `<tr><td>${inv.projectName}</td><td>${inv.manager}</td><td class="fw-bold">${formatCurrency(inv.amount)}</td><td><span class="${inv.paymentReceived?'badge-success':'badge-warning'}">${inv.paymentReceived?'Paid':'Pending'}</span></td><td>-</td></tr>`).join('');
+        document.querySelector('#todayInvoicesTable tbody').innerHTML = html || '<tr><td colspan="5">No invoices today</td></tr>';
+    }
+    
+    function calculateVariance() {
+        let actual = parseFloat(document.getElementById('rev_amount').value) || 0;
+        let budget = parseFloat(document.getElementById('rev_dailyBudget').value.replace(/[^0-9.-]/g, '')) || 0;
+        let variance = actual - budget;
+        document.getElementById('varianceAmount').value = formatCurrency(variance);
+        document.getElementById('variancePercent').value = budget > 0 ? ((variance/budget)*100).toFixed(1)+'%' : '0%';
+    }
+    
+    function updateDailyBudget() {
+        let budget = 5000;
+        document.getElementById('rev_dailyBudget').value = formatCurrency(budget);
+        calculateVariance();
+    }
+    
+    function refreshAllUI() {
+        updateDashboard();
+        updateOrderBook();
+        updatePerformanceTable();
+        updateTodayInvoicesTable();
+        document.getElementById('rev_date').value = new Date().toISOString().split('T')[0];
+        document.getElementById('inv_date').value = new Date().toISOString().split('T')[0];
+        if(document.getElementById('rev_manager')) document.getElementById('rev_manager').addEventListener('change', updateDailyBudget);
+    }
+    
+    async function loadAllData() {
+        showLoading("Fetching live data from Google Sheets...");
+        try {
+            const projectsRaw = await loadProjects();
+            projects = projectsRaw.map(p => ({ ...p, Division: p.Division || p.costCentre || 'Onpoint Group', Manager: p.Manager || p.manager || 'Unassigned', ProjectName: p.ProjectName || p.projectName || 'Unknown', Status: p.Status || 'Forecast', TotalIncome: parseNumber(p["Total Income"] || p.TotalIncome || p.totalIncome), Margin: parseNumber(p.Margin || p.margin || 20) }));
+            
+            const revenueRaw = await loadRevenue();
+            dailyEntries = revenueRaw.map(r => ({ date: (r.Date || r.date || '').toString().split('T')[0], manager: r.Manager || r.manager, projectName: r.ProjectName || r.projectName, amount: parseNumber(r.Amount || r.amount), quality: parseNumber(r.Quality || r.quality) || 80, safety: parseNumber(r.Safety || r.safety) || 0 }));
+            
+            const invoiceRaw = await loadInvoices();
+            invoices = invoiceRaw.map(i => ({ date: (i.Date || i.date || '').toString().split('T')[0], manager: i.Manager || i.manager, projectName: i.ProjectName || i.projectName, amount: parseNumber(i.Amount || i.amount), paymentReceived: i.PaymentReceived === true || i.PaymentReceived === 'TRUE' || i.PaymentReceived === 'true' }));
+            
+            document.getElementById('connectionStatus').innerHTML = '<i class="fas fa-check-circle me-1"></i> Live Connected';
+            document.getElementById('connectionStatus').className = 'connection-status status-connected';
+            refreshAllUI();
+            hideLoading();
+        } catch(err) {
+            console.error("Load error:", err);
+            document.getElementById('connectionStatus').innerHTML = '<i class="fas fa-exclamation-triangle me-1"></i> Connection Failed';
+            document.getElementById('connectionStatus').className = 'connection-status status-disconnected';
+            hideLoading();
+        }
+    }
+    
+    function initCharts() {
+        window.revenueChart = new ApexCharts(document.querySelector("#revenueChart"), { chart: { type: 'bar', height: 360 }, series: [{ name: 'Budget', data: [] }, { name: 'Actual', data: [] }], xaxis: { categories: [] } }); window.revenueChart.render();
+        window.pieChart = new ApexCharts(document.querySelector("#pieChart"), { chart: { type: 'pie', height: 280 }, series: [1], labels: ['Loading'] }); window.pieChart.render();
+        window.managerChart = new ApexCharts(document.querySelector("#managerPerformanceChart"), { chart: { type: 'bar', height: 400 }, series: [{ name: 'Variance %', data: [] }], xaxis: { categories: [] } }); window.managerChart.render();
+    }
+    
+    function updateRevenueChart() { if(window.revenueChart) window.revenueChart.updateSeries([{name:'Budget',data:[10000,12000,15000]},{name:'Actual',data:[9000,11000,14000]}]); }
+    function updatePieChart() { if(window.pieChart) window.pieChart.updateSeries([30000,25000,20000]); }
+    function updateManagerChart() { if(window.managerChart) window.managerChart.updateSeries([{name:'Variance %',data:[5,10,-2,8]}]); }
+    
+    document.querySelectorAll('#dashboardPeriodSelector .period-btn').forEach(btn => btn.addEventListener('click', () => { document.querySelectorAll('#dashboardPeriodSelector .period-btn').forEach(b => b.classList.remove('active')); btn.classList.add('active'); currentDashboardPeriod = btn.dataset.period; updateDashboard(); }));
+    document.querySelectorAll('#revenueChartPeriod .period-btn').forEach(btn => btn.addEventListener('click', () => { document.querySelectorAll('#revenueChartPeriod .period-btn').forEach(b => b.classList.remove('active')); btn.classList.add('active'); currentRevenueChartPeriod = btn.dataset.period; updateRevenueChart(); }));
+    document.querySelectorAll('#pieChartPeriod .period-btn').forEach(btn => btn.addEventListener('click', () => { document.querySelectorAll('#pieChartPeriod .period-btn').forEach(b => b.classList.remove('active')); btn.classList.add('active'); currentPieChartPeriod = btn.dataset.period; updatePieChart(); }));
+    document.querySelectorAll('#managerChartPeriod .period-btn').forEach(btn => btn.addEventListener('click', () => { document.querySelectorAll('#managerChartPeriod .period-btn').forEach(b => b.classList.remove('active')); btn.classList.add('active'); currentManagerPeriod = btn.dataset.period; updateManagerChart(); }));
+    document.querySelectorAll('#managerComparisonPeriod .manager-period-btn').forEach(btn => btn.addEventListener('click', () => { document.querySelectorAll('#managerComparisonPeriod .manager-period-btn').forEach(b => b.classList.remove('active')); btn.classList.add('active'); currentManagerComparisonPeriod = btn.dataset.period; }));
+    document.querySelectorAll('.nav-tab-modern').forEach(tab => tab.addEventListener('click', () => { document.querySelectorAll('.nav-tab-modern').forEach(t => t.classList.remove('active')); document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active')); tab.classList.add('active'); document.getElementById(tab.dataset.tab).classList.add('active'); if(tab.dataset.tab === 'orderbook') updateOrderBook(); if(tab.dataset.tab === 'performance') updatePerformanceTable(); }));
+    
+    function exportFullReport() {
+        let csv = 'Division,Manager,Project,Status,Total Income,Margin %,Gross Profit\n' + projects.map(p => `${p.Division},${p.Manager},${p.ProjectName},${p.Status},${p.TotalIncome},${p.Margin},${(p.TotalIncome * (p.Margin/100))}`).join('\n');
+        let blob = new Blob([csv], {type:'text/csv'}); let a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'orderbook_report.csv'; a.click();
+    }
+    
+    populateDropdownsStatic();
+    initQualityStars();
+    initCharts();
+    loadAllData();
+    setInterval(() => loadAllData(), 300000);
+    </script>
 </body>
 </html>
