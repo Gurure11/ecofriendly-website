@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Onpoint Group | Standalone Revenue Dashboard</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    :root{
+      --bg:#f1f5f9;--card:#ffffff;--line:#e2e8f0;--text:#0f172a;--muted:#64748b;--soft:#f8fafc;
+      --green-bg:#dcfce7;--green-text:#15803d;--amber-bg:#fef3c7;--amber-text:#b45309;
+      --red-bg:#fee2e2;--red-text:#b91c1c;--slate-bg:#e2e8f0;--slate-text:#334155;
+      --shadow:0 10px 30px rgba(15,23,42,.06);--primary:#0f172a;
+    }
+    *{box-sizing:border-box} body{margin:0;font-family:Inter,Arial,sans-serif;background:var(--bg);color:var(--text)}
+    .container{max-width:1500px;margin:0 auto;padding:18px}
+    .topbar,.hero,.card{background:var(--card);border:1px solid var(--line);border-radius:28px;box-shadow:var(--shadow)}
+    .topbar{padding:12px 18px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+    .hero{margin-top:18px;padding:24px;display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap}
+    .hero h1{margin:8px 0;font-size:34px}.muted{color:var(--muted)}
+    .pill{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border-radius:999px;border:1px solid var(--line);background:var(--soft);color:var(--muted);font-size:12px;font-weight:600}
+    .controls{display:grid;grid-template-columns:repeat(4,minmax(160px,1fr));gap:12px;align-content:start;min-width:420px;flex:1}
+    .control,.searchbox input,button,.btn-secondary,.field input,.field select{border-radius:16px;border:1px solid var(--line);background:var(--soft);padding:12px 14px;font-size:14px;color:var(--text);font-family:inherit}
+    .searchbox{grid-column:span 2}.searchbox input{width:100%}
+    button{cursor:pointer;background:var(--primary);color:#fff;border-color:var(--primary)}
+    .btn-secondary{background:#fff;color:var(--text);cursor:pointer}
+    .section{margin-top:18px}
+    .grid-6,.grid-5,.grid-3{display:grid;gap:16px}.grid-6{grid-template-columns:repeat(6,1fr)}.grid-5{grid-template-columns:repeat(5,1fr)}.grid-3{grid-template-columns:repeat(3,1fr)}
+    .card{padding:18px;overflow:hidden}.card h3{margin:0 0 14px;font-size:18px}
+    .kpi{padding:18px;border-radius:24px;background:var(--card);border:1px solid var(--line);box-shadow:var(--shadow);cursor:pointer}
+    .kpi.active{outline:2px solid #0f172a20;border-color:var(--text)}.kpi-title{color:var(--muted);font-size:14px}.kpi-value{font-size:28px;font-weight:700;margin:10px 0 4px}.kpi-sub{color:var(--muted);font-size:12px}
+    .badge{display:inline-flex;padding:5px 10px;border-radius:999px;font-size:12px;font-weight:700;border:1px solid transparent;white-space:nowrap}
+    .b-green{background:var(--green-bg);color:var(--green-text);border-color:#bbf7d0}.b-amber{background:var(--amber-bg);color:var(--amber-text);border-color:#fde68a}.b-red{background:var(--red-bg);color:var(--red-text);border-color:#fecaca}.b-slate{background:var(--slate-bg);color:var(--slate-text);border-color:#cbd5e1}
+    .tabs{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;background:#cbd5e166;border-radius:18px;padding:8px;margin-top:18px}
+    .tab{background:transparent;color:var(--text);border:none;border-radius:14px;padding:12px;font-weight:700;cursor:pointer}.tab.active{background:#fff;box-shadow:var(--shadow)}
+    .tab-content{display:none}.tab-content.active{display:block}
+    .table-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:22px;background:#fff}
+    table{width:100%;border-collapse:collapse;min-width:900px} thead{background:#f1f5f9}
+    th,td{padding:14px 16px;text-align:left;border-bottom:1px solid var(--line);font-size:14px;vertical-align:middle}
+    th{font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)} td.right,th.right{text-align:right}
+    .summary-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:14px}.summary-box{border:1px solid var(--line);border-radius:24px;background:var(--soft);padding:16px}.summary-box .big{font-size:24px;font-weight:700;margin-top:10px}
+    .row{display:grid;gap:16px}.row.two{grid-template-columns:1fr 1fr}.row.two-wide{grid-template-columns:2fr 1fr}
+    .filter-strip{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:12px;color:var(--muted);font-size:14px}
+    .form-grid{display:grid;grid-template-columns:repeat(12,1fr);gap:14px}.field{display:flex;flex-direction:column;gap:8px}.field label{font-size:12px;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.08em}
+    .span-2{grid-column:span 2}.span-3{grid-column:span 3}.span-4{grid-column:span 4}.span-12{grid-column:span 12}
+    .loading{position:fixed;inset:0;background:rgba(15,23,42,.35);display:none;align-items:center;justify-content:center;z-index:9999;backdrop-filter:blur(4px)}
+    .loading-card{background:#fff;border-radius:24px;padding:24px 30px;box-shadow:var(--shadow);border:1px solid var(--line);min-width:260px;text-align:center}
+    .spinner{width:36px;height:36px;border-radius:50%;border:4px solid #e2e8f0;border-top-color:#0f172a;animation:spin .8s linear infinite;margin:0 auto 14px}@keyframes spin{to{transform:rotate(360deg)}}
+    .action-mini{border:1px solid var(--line);border-radius:20px;background:var(--soft);padding:16px;margin-bottom:12px}
+    .chart-box{height:320px}.chart-box canvas{width:100%!important;height:100%!important}
+    @media (max-width:1280px){.grid-6{grid-template-columns:repeat(3,1fr)}.grid-5{grid-template-columns:repeat(2,1fr)}.summary-grid{grid-template-columns:repeat(2,1fr)}.row.two,.row.two-wide,.grid-3{grid-template-columns:1fr}.tabs{grid-template-columns:repeat(3,1fr)}}
+    @media (max-width:900px){.controls{grid-template-columns:1fr;min-width:100%}.searchbox{grid-column:span 1}.grid-6,.grid-5,.summary-grid,.tabs,.form-grid{grid-template-columns:1fr}.span-2,.span-3,.span-4,.span-12{grid-column:span 1}}
+  </style>
+</head>
+<body>
+<div class="loading" id="loadingOverlay"><div class="loading-card"><div class="spinner"></div><div id="loadingMessage">Loading live data from Google Sheets...</div></div></div>
+<div class="container">
+  <div class="topbar">
+    <div class="pill">Onpoint Group reporting dashboard</div>
+    <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
+      <div id="connectionBadge" class="badge b-amber">Connecting</div>
+      <button id="refreshBtn">Refresh</button>
+      <button id="exportBtn">Export report</button>
+    </div>
+  </div>
+
+  <div class="hero">
+    <div style="flex:1; min-width:320px;">
+      <div class="muted" style="font-weight:600;">Live Google Sheets integration</div>
+      <div class="pill" style="margin-top:12px;">Standalone HTML version</div>
+      <h1>Revenue, Performance &amp; Action Reporting</h1>
+      <p class="muted">Styled like the standalone revenue dashboard, while preserving live Google Sheets connectivity through the existing Apps Script endpoint.</p>
+    </div>
+    <div class="controls">
+      <select id="period" class="control"></select>
+      <select id="division" class="control"></select>
+      <select id="managerFilter" class="control"></select>
+      <div class="searchbox"><input id="query" placeholder="Search division, PM, project or client..." /></div>
+    </div>
+  </div>
+
+  <div id="headlineKpis" class="section grid-6"></div>
+  <div class="section card"><h3>Group at a glance</h3><div id="summaryGrid" class="summary-grid"></div></div>
+  <div id="performanceKpis" class="section grid-5"></div>
+  <div class="filter-strip"><span><strong>Active KPI filter:</strong></span><span id="activeKpiBadge" class="badge b-slate">All records</span><button id="clearFilterBtn" class="btn-secondary" style="display:none;">Clear filter</button></div>
+  <div id="cashKpis" class="section grid-3"></div>
+
+  <div class="tabs">
+    <button class="tab active" data-tab="executive">Executive</button>
+    <button class="tab" data-tab="projectsTab">Project Entry</button>
+    <button class="tab" data-tab="revenueTab">Daily Revenue</button>
+    <button class="tab" data-tab="invoicesTab">Invoices</button>
+    <button class="tab" data-tab="orderbookTab">Order Book</button>
+    <button class="tab" data-tab="performanceTab">Performance</button>
+  </div>
+
+  <div id="executive" class="tab-content active section">
+    <div class="row two">
+      <div class="card" style="grid-column:1/-1;"><h3>Budget vs actual and risk view</h3><div class="table-wrap"><table id="budgetRiskTable"></table></div></div>
+      <div class="card"><h3>Division performance</h3><div class="table-wrap"><table id="divisionTable"></table></div></div>
+      <div class="card"><h3>PM performance</h3><div class="table-wrap"><table id="pmTable"></table></div></div>
+    </div>
+    <div class="row two-wide section">
+      <div class="card"><h3>Reported revenue vs target</h3><div class="chart-box"><canvas id="barChart"></canvas></div></div>
+      <div class="card"><h3>Division mix</h3><div class="chart-box" style="height:280px;"><canvas id="pieChart"></canvas></div><div id="divisionMixLegend"></div></div>
+    </div>
+    <div class="row two section">
+      <div class="card"><h3>Project timeline</h3><div class="table-wrap"><table id="timelineTable"></table></div></div>
+      <div class="card"><h3>Action summary</h3><div id="actionSummary"></div></div>
+    </div>
+  </div>
+
+  <div id="projectsTab" class="tab-content section">
+    <div class="card"><h3>Add new project</h3>
+      <div class="form-grid">
+        <div class="field span-4"><label>Project Name</label><input id="projectName" /></div>
+        <div class="field span-2"><label>Division / Cost Centre</label><input id="costCentre" placeholder="Onpoint Group" /></div>
+        <div class="field span-2"><label>Manager</label><select id="projectManager"></select></div>
+        <div class="field span-2"><label>Status</label><select id="projectStatus"><option>Confirmed</option><option>Forecast</option></select></div>
+        <div class="field span-2"><label>Total Income (R)</label><input id="totalIncome" type="number" min="0" /></div>
+        <div class="field span-2"><label>Margin %</label><input id="margin" type="number" min="0" value="25" /></div>
+        <div class="field span-2"><label>Start Date</label><input id="projectStartDate" type="date" /></div>
+        <div class="field span-2"><label>End Date</label><input id="projectEndDate" type="date" /></div>
+        <div class="field span-12"><button id="saveProjectBtn">Save project</button></div>
+      </div>
+    </div>
+  </div>
+
+  <div id="revenueTab" class="tab-content section">
+    <div class="card"><h3>Daily revenue &amp; performance entry</h3>
+      <div class="form-grid">
+        <div class="field span-2"><label>Date</label><input id="revDate" type="date" /></div>
+        <div class="field span-3"><label>Project Manager</label><select id="revManager"></select></div>
+        <div class="field span-4"><label>Project Name</label><select id="revProjectName"></select></div>
+        <div class="field span-3"><label>Actual Revenue (R)</label><input id="revAmount" type="number" min="0" /></div>
+        <div class="field span-3"><label>Budget Revenue (Daily)</label><input id="budgetRevenue" readonly /></div>
+        <div class="field span-3"><label>Variance (R)</label><input id="varianceAmount" readonly /></div>
+        <div class="field span-2"><label>Variance %</label><input id="variancePercent" readonly /></div>
+        <div class="field span-2"><label>Quality %</label><input id="qualityScoreInput" type="number" min="0" max="100" value="80" /></div>
+        <div class="field span-2"><label>Safety Incidents</label><input id="safetyIncidentsInput" type="number" min="0" value="0" /></div>
+        <div class="field span-12"><button id="saveRevenueBtn">Save revenue entry</button></div>
+      </div>
+      <div class="section"><h3 style="margin-bottom:10px;">Today’s revenue entries</h3><div class="table-wrap"><table id="todayRevenueTable"></table></div></div>
+    </div>
+  </div>
+
+  <div id="invoicesTab" class="tab-content section">
+    <div class="card"><h3>Invoice entry</h3>
+      <div class="form-grid">
+        <div class="field span-2"><label>Invoice Date</label><input id="invDate" type="date" /></div>
+        <div class="field span-3"><label>Project Manager</label><select id="invManager"></select></div>
+        <div class="field span-4"><label>Project Name</label><select id="invProjectName"></select></div>
+        <div class="field span-3"><label>Invoice Amount (R)</label><input id="invAmount" type="number" min="0" /></div>
+        <div class="field span-3"><label>Payment Received</label><select id="paymentReceived"><option value="false">No</option><option value="true">Yes</option></select></div>
+        <div class="field span-3"><label>Payment Date</label><input id="paymentDate" type="date" /></div>
+        <div class="field span-12"><button id="saveInvoiceBtn">Save invoice</button></div>
+      </div>
+      <div class="section"><h3 style="margin-bottom:10px;">Today’s invoices</h3><div class="table-wrap"><table id="todayInvoicesTable"></table></div></div>
+    </div>
+  </div>
+
+  <div id="orderbookTab" class="tab-content section"><div class="card"><h3>Order book</h3><div class="table-wrap"><table id="orderBookTable"></table></div></div></div>
+  <div id="performanceTab" class="tab-content section">
+    <div class="card"><h3>PM balanced scorecard</h3><div class="table-wrap"><table id="scorecardTable"></table></div></div>
+    <div class="card section"><h3>Performance by division</h3><div class="chart-box"><canvas id="areaChart"></canvas></div><div class="table-wrap" style="margin-top:18px;"><table id="projectPerfTable"></table></div></div>
+    <div class="card section"><h3>Manager comparison</h3><div class="table-wrap"><table id="managerComparisonTable"></table></div></div>
+    <div class="card section"><h3>Manager performance summary</h3><div class="table-wrap"><table id="perfTable"></table></div></div>
+  </div>
+</div>
+
+<script>
+const CONFIG={SCRIPT_URL:'https://script.google.com/macros/s/AKfycbxSQQrBq3I0rZWyhj4aS-o5cEVXFzX9Sjoj4lsVpSFfLAa6aQLXWd2LclLPiR51EJhL/exec'};
+const PROJECT_MANAGERS=["Moses","Johan","Siyanda","Dave","James","Rayman","Timothy","Roads Site Agent COT","Civil Site Agent","Roads Site Agent CPT","Brian","EL CM","Stanley","Tony","Govern","Graham","Ronald","Petros","Elroy","Mesh","Vusi","Tinotenda","Sydney","Andrew","Phillip","Moeti"];
+const PERIODS=['Daily','Weekly','Monthly','Quarterly','Yearly'];
+const DIVISION_COLORS=['#0f172a','#334155','#475569','#64748b','#94a3b8','#1e293b','#475569','#64748b'];
+const monthKeys=['Mar26','Apr26','May26','Jun26','Jul26','Aug26','Sep26','Oct26','Nov26','Dec26','Jan27','Feb27'];
+const state={period:'Daily',division:'All',manager:'All',query:'',activeKpi:'all'};
+let charts={},projects=[],dailyEntries=[],invoices=[],budgetMemoryMap=new Map();
+
+const showLoading=m=>{loadingOverlay.style.display='flex';loadingMessage.textContent=m||'Loading...'};
+const hideLoading=()=>loadingOverlay.style.display='none';
+function setConnection(text,cls){const el=document.getElementById('connectionBadge');el.className='badge '+cls;el.textContent=text}
+const money=v=>new Intl.NumberFormat('en-ZA',{style:'currency',currency:'ZAR',maximumFractionDigits:0}).format(Number(v)||0);
+const parseNumber=v=>Number(String(v??'').replace(/[^0-9.-]+/g,''))||0;
+const pct=(a,t)=>t?Math.round((a/t)*100):0;
+const statusTone=s=>s>=80?'b-green':s>=50?'b-amber':'b-red';
+const actionTone=s=>s==='Closed'?'b-green':s==='In Progress'?'b-amber':s==='Escalated'?'b-red':'b-slate';
+const kpiTone=(s,g,a)=>s>=g?'green':s>=a?'amber':'red';
+const badge=(t,c)=>`<span class="badge ${c}">${t}</span>`;
+const cell=(html,cls='')=>({html,class:cls});
+const todayISO=()=>new Date().toISOString().split('T')[0];
+const safeDate=v=>{const d=new Date(v);return isNaN(d)?null:d};
+const currentMonthIndex=()=>((new Date().getMonth()+10)%12);
+const currentQuarterIndex=()=>Math.floor(new Date().getMonth()/3);
+const periodToBucket=p=>p.toLowerCase();
+
+function projectMonthBudget(project, monthIdx){if(Array.isArray(project.months)&&project.months[monthIdx]) return parseNumber(project.months[monthIdx]);return parseNumber(project.TotalIncome)/12}
+function projectDailyTarget(project, monthIdx){return projectMonthBudget(project, monthIdx)/22}
+function filteredRevenueEntriesForPeriod(period){
+  const now=new Date(),today=todayISO();
+  if(period==='Daily') return dailyEntries.filter(e=>e.date===today);
+  if(period==='Weekly'){const weekStart=new Date();weekStart.setHours(0,0,0,0);weekStart.setDate(weekStart.getDate()-weekStart.getDay());return dailyEntries.filter(e=>safeDate(e.date)&&safeDate(e.date)>=weekStart)}
+  if(period==='Monthly') return dailyEntries.filter(e=>{const d=safeDate(e.date);return d&&d.getMonth()===now.getMonth()&&d.getFullYear()===now.getFullYear()});
+  if(period==='Quarterly'){const q=Math.floor(now.getMonth()/3);return dailyEntries.filter(e=>{const d=safeDate(e.date);return d&&Math.floor(d.getMonth()/3)===q&&d.getFullYear()===now.getFullYear()})}
+  return dailyEntries.filter(e=>{const d=safeDate(e.date);return d&&d.getFullYear()===now.getFullYear()});
+}
+function filteredInvoicesForPeriod(period){
+  const now=new Date(),today=todayISO();
+  if(period==='Daily') return invoices.filter(i=>i.date===today);
+  if(period==='Weekly'){const weekStart=new Date();weekStart.setHours(0,0,0,0);weekStart.setDate(weekStart.getDate()-weekStart.getDay());return invoices.filter(i=>safeDate(i.date)&&safeDate(i.date)>=weekStart)}
+  if(period==='Monthly') return invoices.filter(i=>{const d=safeDate(i.date);return d&&d.getMonth()===now.getMonth()&&d.getFullYear()===now.getFullYear()});
+  if(period==='Quarterly'){const q=Math.floor(now.getMonth()/3);return invoices.filter(i=>{const d=safeDate(i.date);return d&&Math.floor(d.getMonth()/3)===q&&d.getFullYear()===now.getFullYear()})}
+  return invoices.filter(i=>{const d=safeDate(i.date);return d&&d.getFullYear()===now.getFullYear()});
+}
+function periodRevenue(project, period){
+  if(period==='Daily') return dailyEntries.filter(e=>e.projectName===project.ProjectName&&e.manager===project.Manager&&e.date===todayISO()).reduce((s,e)=>s+e.amount,0);
+  if(period==='Weekly') return filteredRevenueEntriesForPeriod('Weekly').filter(e=>e.projectName===project.ProjectName&&e.manager===project.Manager).reduce((s,e)=>s+e.amount,0);
+  if(period==='Monthly') return filteredRevenueEntriesForPeriod('Monthly').filter(e=>e.projectName===project.ProjectName&&e.manager===project.Manager).reduce((s,e)=>s+e.amount,0);
+  if(period==='Quarterly') return filteredRevenueEntriesForPeriod('Quarterly').filter(e=>e.projectName===project.ProjectName&&e.manager===project.Manager).reduce((s,e)=>s+e.amount,0);
+  return filteredRevenueEntriesForPeriod('Yearly').filter(e=>e.projectName===project.ProjectName&&e.manager===project.Manager).reduce((s,e)=>s+e.amount,0);
+}
+function periodTarget(project, period){const monthIdx=currentMonthIndex();if(period==='Daily') return projectDailyTarget(project,monthIdx);if(period==='Weekly') return projectDailyTarget(project,monthIdx)*7;if(period==='Monthly') return projectMonthBudget(project,monthIdx);if(period==='Quarterly') return parseNumber(project.TotalIncome)/4;return parseNumber(project.TotalIncome)}
+function projectCashCollected(project, period){return filteredInvoicesForPeriod(period).filter(i=>i.projectName===project.ProjectName&&i.paymentReceived).reduce((s,i)=>s+i.amount,0)}
+function projectEntries(project, period){return filteredRevenueEntriesForPeriod(period).filter(e=>e.projectName===project.ProjectName&&e.manager===project.Manager)}
+function qualityScore(project, period){const rows=projectEntries(project,period);return rows.length?Math.round(rows.reduce((s,e)=>s+(parseNumber(e.quality)||80),0)/rows.length):80}
+function safetyScore(project, period){const rows=projectEntries(project,period);const incidents=rows.reduce((s,e)=>s+(parseNumber(e.safety)||0),0);return Math.max(0,100-incidents*10)}
+function deadlineScore(project){const start=safeDate(project.StartDate),end=safeDate(project.EndDate);if(!start||!end) return 75;const total=end-start;if(total<=0) return 100;const elapsed=Math.min(Math.max(Date.now()-start.getTime(),0),total);return Math.max(0,Math.min(100,Math.round((elapsed/total)*100)))}
+
+function aggregateGroup(projectRows){
+  const empty={daily:0,weekly:0,monthly:0,quarterly:0,yearly:0};
+  const result={revenue:{...empty},target:{...empty},cash:{...empty},profitability:{...empty},deadlines:{...empty},safety:{...empty},quality:{...empty},achievement:{...empty}};
+  PERIODS.forEach(label=>{const key=label.toLowerCase();const revenue=projectRows.reduce((s,p)=>s+periodRevenue(p,label),0);const target=projectRows.reduce((s,p)=>s+periodTarget(p,label),0);const cash=projectRows.reduce((s,p)=>s+projectCashCollected(p,label),0);const weighted=projectRows.reduce((s,p)=>s+periodRevenue(p,label)*((parseNumber(p.Margin)||0)/100),0);const avgDl=Math.round(projectRows.reduce((s,p)=>s+deadlineScore(p),0)/Math.max(projectRows.length,1));const avgSf=Math.round(projectRows.reduce((s,p)=>s+safetyScore(p,label),0)/Math.max(projectRows.length,1));const avgQl=Math.round(projectRows.reduce((s,p)=>s+qualityScore(p,label),0)/Math.max(projectRows.length,1));result.revenue[key]=revenue;result.target[key]=target;result.cash[key]=cash;result.profitability[key]=Math.round((weighted/Math.max(revenue,1))*100);result.deadlines[key]=avgDl;result.safety[key]=avgSf;result.quality[key]=avgQl;result.achievement[key]=pct(revenue,target)});return result
+}
+function aggregateByDimension(projectRows, dimension){
+  const map=new Map();
+  projectRows.forEach(project=>{const key=project[dimension]||'Unassigned';const c=map.get(key)||{name:key,daily:0,weekly:0,monthly:0,quarterly:0,yearly:0,targetDaily:0,targetWeekly:0,targetMonthly:0,targetQuarterly:0,targetYearly:0,cash:0};c.daily+=periodRevenue(project,'Daily');c.weekly+=periodRevenue(project,'Weekly');c.monthly+=periodRevenue(project,'Monthly');c.quarterly+=periodRevenue(project,'Quarterly');c.yearly+=periodRevenue(project,'Yearly');c.targetDaily+=periodTarget(project,'Daily');c.targetWeekly+=periodTarget(project,'Weekly');c.targetMonthly+=periodTarget(project,'Monthly');c.targetQuarterly+=periodTarget(project,'Quarterly');c.targetYearly+=periodTarget(project,'Yearly');c.cash+=projectCashCollected(project,'Yearly');map.set(key,c)});return Array.from(map.values())
+}
+const bucketValue=(row,b)=>row[b];
+function targetBucketValue(row,b){if(b==='daily') return row.targetDaily;if(b==='weekly') return row.targetWeekly;if(b==='monthly') return row.targetMonthly;if(b==='quarterly') return row.targetQuarterly;return row.targetYearly}
+function filteredProjects(){
+  return projects.filter(project=>{
+    const passDivision=state.division==='All'||(project.Division||'Unassigned')===state.division;
+    const passManager=state.manager==='All'||(project.Manager||'Unassigned')===state.manager;
+    const passQuery=`${project.ProjectName} ${project.Manager} ${project.Division} ${project.Client||''}`.toLowerCase().includes(state.query.toLowerCase());
+    const revenue=periodRevenue(project,state.period),target=periodTarget(project,state.period),gp=parseNumber(project.Margin),q=qualityScore(project,state.period),s=safetyScore(project,state.period),dl=deadlineScore(project),cash=projectCashCollected(project,state.period);
+    const passKpi=state.activeKpi==='all'?true:state.activeKpi==='revenue'?revenue<target:state.activeKpi==='profitability'?gp<15:state.activeKpi==='deadlines'?dl<80:state.activeKpi==='safety'?s<100:state.activeKpi==='quality'?q<80:state.activeKpi==='cash'?cash<revenue:revenue<target;
+    return passDivision&&passManager&&passQuery&&passKpi;
+  });
+}
+function buildTable(el, headers, rows){el.innerHTML=`<thead><tr>${headers.map(h=>`<th class="${h.class||''}">${h.label}</th>`).join('')}</tr></thead><tbody>${rows.length?rows.map(r=>`<tr>${r.map(c=>typeof c==='string'?c:`<td class="${c.class||''}">${c.html}</td>`).join('')}</tr>`).join(''):`<tr><td colspan="${headers.length}">No data available</td></tr>`}</tbody>`}
+function getStoredBudget(m,p){return budgetMemoryMap.get(`${m}|${p}`)}
+function setStoredBudget(m,p,b){budgetMemoryMap.set(`${m}|${p}`,b);localStorage.setItem('dailyBudgetMemory',JSON.stringify(Array.from(budgetMemoryMap.entries())))}
+function loadBudgetMemoryFromStorage(){const s=localStorage.getItem('dailyBudgetMemory');if(!s) return;try{budgetMemoryMap=new Map(JSON.parse(s))}catch{budgetMemoryMap=new Map()}}
+function updateDailyBudgetWithMemory(){
+  const manager=revManager.value, projectName=revProjectName.value;
+  if(!manager||!projectName){budgetRevenue.value=money(0);calculateVariance();return}
+  const stored=getStoredBudget(manager,projectName);
+  if(stored!=null){budgetRevenue.value=money(stored);calculateVariance();return}
+  const project=projects.find(p=>p.ProjectName===projectName&&p.Manager===manager)||projects.find(p=>p.ProjectName===projectName);
+  budgetRevenue.value=money(project?periodTarget(project,'Daily'):0);calculateVariance();
+}
+function makeBudgetEditable(){
+  budgetRevenue.addEventListener('click',()=>{budgetRevenue.readOnly=false;budgetRevenue.focus();budgetRevenue.select()});
+  budgetRevenue.addEventListener('blur',()=>{const manager=revManager.value, projectName=revProjectName.value, raw=parseNumber(budgetRevenue.value);if(manager&&projectName) setStoredBudget(manager,projectName,raw);budgetRevenue.value=money(raw);budgetRevenue.readOnly=true;calculateVariance()})
+}
+function calculateVariance(){const actual=parseNumber(revAmount.value), budget=parseNumber(budgetRevenue.value), variance=actual-budget;varianceAmount.value=money(variance);variancePercent.value=budget>0?((variance/budget)*100).toFixed(1)+'%':'0%';varianceAmount.style.color=variance>=0?'#15803d':'#b91c1c'}
+async function safeFetch(url){const res=await fetch(url);const text=await res.text();try{return JSON.parse(text)}catch{return {data:[]}}}
+function normaliseProjects(raw){return raw.map((p,idx)=>({id:p.id||`P${idx+1}`,Division:p.Division||p.costCentre||p.CostCentre||'Onpoint Group',Manager:p.Manager||p.manager||'Unassigned',ProjectName:p.ProjectName||p.projectName||p.Project||'Unknown',Status:p.Status||p.status||'Forecast',TotalIncome:parseNumber(p['Total Income']||p.TotalIncome||p.totalIncome||0),Margin:parseNumber(p.Margin||p.margin||20),StartDate:p.StartDate||p.startDate||'',EndDate:p.EndDate||p.endDate||'',Client:p.Client||p.client||'',months:monthKeys.map(k=>parseNumber(p[k]))}))}
+function normaliseRevenue(raw){return raw.map(r=>({date:String(r.Date||r.date||'').split('T')[0],manager:r.Manager||r.manager||'',projectName:r.ProjectName||r.projectName||'',amount:parseNumber(r.Amount||r.amount||0),quality:parseNumber(r.Quality||r.quality||80)||80,safety:parseNumber(r.Safety||r.safety||0)}))}
+function normaliseInvoices(raw){return raw.map(i=>({date:String(i.Date||i.date||'').split('T')[0],manager:i.Manager||i.manager||'',projectName:i.ProjectName||i.projectName||'',amount:parseNumber(i.Amount||i.amount||0),paymentReceived:i.PaymentReceived===true||i.PaymentReceived==='TRUE'||i.PaymentReceived==='true'||i.PaymentReceived===1||i.paymentReceived===true,paymentDate:i.PaymentDate||i.paymentDate||''}))}
+async function loadAllData(){
+  showLoading('Fetching live data...');setConnection('Connecting','b-amber');
+  try{
+    const [pr,rr,ir]=await Promise.all([safeFetch(`${CONFIG.SCRIPT_URL}?action=getProjects&_=${Date.now()}`),safeFetch(`${CONFIG.SCRIPT_URL}?action=getRevenue&_=${Date.now()}`),safeFetch(`${CONFIG.SCRIPT_URL}?action=getInvoices&_=${Date.now()}`)]);
+    projects=normaliseProjects(pr.data||(Array.isArray(pr)?pr:[]));dailyEntries=normaliseRevenue(rr.data||(Array.isArray(rr)?rr:[]));invoices=normaliseInvoices(ir.data||(Array.isArray(ir)?ir:[]));
+    setConnection('Live Connected','b-green');populateFilters();populateFormDropdowns();refreshAllUI();
+  }catch(err){console.error(err);setConnection('Connection Failed','b-red');alert('Could not load live data from the Apps Script endpoint.')}finally{hideLoading()}
+}
+function populateFilters(){
+  const divisions=['All',...new Set(projects.map(p=>p.Division).filter(Boolean))];
+  const managers=['All',...new Set([...projects.map(p=>p.Manager).filter(Boolean),...PROJECT_MANAGERS])];
+  division.innerHTML=divisions.map(v=>`<option value="${v}">${v==='All'?'All divisions':v}</option>`).join('');
+  managerFilter.innerHTML=managers.map(v=>`<option value="${v}">${v==='All'?'All managers':v}</option>`).join('');
+  period.innerHTML=PERIODS.map(v=>`<option value="${v}">${v}</option>`).join('');
+  period.value=state.period;division.value=divisions.includes(state.division)?state.division:'All';managerFilter.value=managers.includes(state.manager)?state.manager:'All';
+}
+function populateFormDropdowns(){
+  const managers=[...new Set([...PROJECT_MANAGERS,...projects.map(p=>p.Manager).filter(Boolean)])], projectNames=[...new Set(projects.map(p=>p.ProjectName).filter(Boolean))];
+  ['projectManager','revManager','invManager'].forEach(id=>document.getElementById(id).innerHTML='<option value="">Select Manager</option>'+managers.map(v=>`<option value="${v}">${v}</option>`).join(''));
+  ['revProjectName','invProjectName'].forEach(id=>document.getElementById(id).innerHTML='<option value="">Select Project</option>'+projectNames.map(v=>`<option value="${v}">${v}</option>`).join(''));
+}
+function headlineKpisData(){const confirmed=projects.filter(p=>p.Status==='Confirmed').reduce((s,p)=>s+p.TotalIncome,0), forecast=projects.filter(p=>p.Status==='Forecast').reduce((s,p)=>s+p.TotalIncome,0), total=confirmed+forecast, mtd=filteredRevenueEntriesForPeriod('Monthly').reduce((s,e)=>s+e.amount,0), ytd=filteredRevenueEntriesForPeriod('Yearly').reduce((s,e)=>s+e.amount,0), btye=Math.max(0,total-ytd);return[{title:'Total Confirmed',value:money(confirmed),sub:'Confirmed projects'},{title:'Total Forecast',value:money(forecast),sub:'Forecast projects'},{title:'Total Order Book',value:money(total),sub:'Confirmed + forecast'},{title:'Group BTYE',value:money(btye),sub:'Balance to year-end'},{title:'MTD Actual',value:money(mtd),sub:'This month actual revenue'},{title:'Group YTD',value:money(ytd),sub:'Year-to-date revenue'}]}
+function renderTodayRevenueTable(){buildTable(todayRevenueTable,[{label:'Date'},{label:'Manager'},{label:'Project'},{label:'Amount',class:'right'},{label:'Quality',class:'right'},{label:'Safety',class:'right'}],dailyEntries.filter(e=>e.date===todayISO()).map(e=>[cell(e.date),cell(e.manager),cell(e.projectName),cell(money(e.amount),'right'),cell((parseNumber(e.quality)||80)+'%','right'),cell(String(parseNumber(e.safety)||0),'right')]))}
+function renderTodayInvoicesTable(){buildTable(todayInvoicesTable,[{label:'Date'},{label:'Manager'},{label:'Project'},{label:'Amount',class:'right'},{label:'Payment',class:'right'},{label:'Payment Date'}],invoices.filter(i=>i.date===todayISO()).map(i=>[cell(i.date),cell(i.manager),cell(i.projectName),cell(money(i.amount),'right'),cell(badge(i.paymentReceived?'Paid':'Pending',i.paymentReceived?'b-green':'b-amber'),'right'),cell(i.paymentDate||'-')]))}
+function refreshAllUI(){render();renderTodayRevenueTable();renderTodayInvoicesTable()}
+function render(){
+  const filtered=filteredProjects(), activeBucket=periodToBucket(state.period), groupRollup=aggregateGroup(filtered), divisionRollup=aggregateByDimension(filtered,'Division'), pmRollup=aggregateByDimension(filtered,'Manager');
+  const totals={revenue:groupRollup.revenue[activeBucket],target:groupRollup.target[activeBucket],cash:groupRollup.cash[activeBucket],margin:Math.round((groupRollup.profitability[activeBucket]/100)*groupRollup.revenue[activeBucket]),deadline:groupRollup.deadlines[activeBucket],safety:groupRollup.safety[activeBucket],quality:groupRollup.quality[activeBucket]};
+  const revenueAchievement=pct(totals.revenue,totals.target), profitability=Math.round((totals.margin/Math.max(totals.revenue,1))*100), deadline=Math.round(totals.deadline), safety=Math.round(totals.safety), quality=Math.round(totals.quality), cashConversion=pct(totals.cash,Math.max(totals.revenue,1));
+  headlineKpis.innerHTML=headlineKpisData().map(k=>`<div class="kpi"><div class="kpi-title">${k.title}</div><div class="kpi-value">${k.value}</div><div class="kpi-sub">${k.sub}</div></div>`).join('');
+  const performanceKpis=[{title:'Revenue',value:money(totals.revenue),sub:`${state.period} reported revenue`,tone:kpiTone(revenueAchievement,80,50),filterKey:'revenue'},{title:'Profitability',value:`${profitability}%`,sub:`${state.period} margin`,tone:kpiTone(profitability,18,12),filterKey:'profitability'},{title:'Deadlines',value:`${deadline}%`,sub:'Timeline progress',tone:kpiTone(deadline,80,50),filterKey:'deadlines'},{title:'Safety',value:`${safety}%`,sub:'Safety score',tone:safety===100?'green':'amber',filterKey:'safety'},{title:'Quality',value:`${quality}%`,sub:'Quality score',tone:kpiTone(quality,80,50),filterKey:'quality'}];
+  const cashKpis=[{title:'Cash Collected',value:money(totals.cash),sub:`${state.period} collections`,tone:kpiTone(cashConversion,80,50),filterKey:'cash'},{title:'Cash Conversion',value:`${cashConversion}%`,sub:'Revenue to cash',tone:kpiTone(cashConversion,80,50),filterKey:'cash'},{title:'Open Actions',value:String(filtered.filter(p=>pct(periodRevenue(p,state.period),periodTarget(p,state.period))<100).length),sub:'Under target this period',tone:filtered.some(p=>pct(periodRevenue(p,state.period),periodTarget(p,state.period))<50)?'red':'amber',filterKey:'actions'}];
+  performanceKpisEl=performanceKpis.map(k=>`<div class="kpi ${state.activeKpi===k.filterKey?'active':''}" data-kpi="${k.filterKey}"><div class="kpi-title">${k.title}</div><div class="kpi-value">${k.value}</div><div class="kpi-sub">${k.sub}</div></div>`).join('');
+  performanceKpis.innerHTML=performanceKpisEl;
+  cashKpis.innerHTML=cashKpis.map(k=>`<div class="kpi ${state.activeKpi===k.filterKey?'active':''}" data-kpi="${k.filterKey}"><div class="kpi-title">${k.title}</div><div class="kpi-value">${k.value}</div><div class="kpi-sub">${k.sub}</div></div>`).join('');
+  activeKpiBadge.textContent=state.activeKpi==='all'?'All records':state.activeKpi;clearFilterBtn.style.display=state.activeKpi==='all'?'none':'inline-block';
+  const groupAtGlance=PERIODS.map(label=>({label,revenue:groupRollup.revenue[label.toLowerCase()],target:groupRollup.target[label.toLowerCase()],achievement:groupRollup.achievement[label.toLowerCase()]}));
+  summaryGrid.innerHTML=groupAtGlance.map(item=>`<div class="summary-box"><div class="muted" style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;">${item.label}</div><div class="big">${money(item.revenue)}</div><div class="muted" style="margin-top:6px;">Target ${money(item.target)}</div><div style="display:flex;justify-content:space-between;align-items:center;margin-top:14px;"><span class="muted">Achievement</span>${badge(item.achievement+'%',statusTone(item.achievement))}</div></div>`).join('');
+  const budgetVsActualRisk=['Daily','Weekly','Monthly','Yearly'].map(label=>{const key=label.toLowerCase(), ach=groupRollup.achievement[key];return{label,budget:groupRollup.target[key],actual:groupRollup.revenue[key],gap:groupRollup.revenue[key]-groupRollup.target[key],achievement:ach,risk:ach>=85?'Low':ach>=65?'Medium':'High',tone:ach>=85?'b-green':ach>=65?'b-amber':'b-red'}});
+  buildTable(budgetRiskTable,[{label:'Period'},{label:'Budget',class:'right'},{label:'Actual',class:'right'},{label:'Variance',class:'right'},{label:'Ach %',class:'right'},{label:'Risk',class:'right'}],budgetVsActualRisk.map(item=>[cell(item.label),cell(money(item.budget),'right'),cell(money(item.actual),'right'),cell(`<span style="color:${item.gap>=0?'#15803d':'#b91c1c'}">${money(item.gap)}</span>`,'right'),cell(item.achievement+'%','right'),cell(badge(item.risk,item.tone),'right')]));
+  const divisionAtGlance=divisionRollup.map(row=>({name:row.name,actual:bucketValue(row,activeBucket),target:targetBucketValue(row,activeBucket),score:pct(bucketValue(row,activeBucket),targetBucketValue(row,activeBucket))})).sort((a,b)=>b.actual-a.actual);
+  buildTable(divisionTable,[{label:'Division'},{label:'Actual',class:'right'},{label:'Target',class:'right'},{label:'Score',class:'right'}],divisionAtGlance.map(item=>[cell(item.name),cell(money(item.actual),'right'),cell(money(item.target),'right'),cell(badge(item.score+'%',statusTone(item.score)),'right')]));
+  const pmBalancedScorecard=pmRollup.map(row=>{const pmProjects=filtered.filter(p=>p.Manager===row.name), dailyScore=pct(row.daily,row.targetDaily), weeklyScore=pct(row.weekly,row.targetWeekly), monthlyScore=pct(row.monthly,row.targetMonthly), quarterlyScore=pct(row.quarterly,row.targetQuarterly), yearlyScore=pct(row.yearly,row.targetYearly), profitability=Math.round(pmProjects.reduce((s,p)=>s+parseNumber(p.Margin),0)/Math.max(pmProjects.length,1)), deadlines=Math.round(pmProjects.reduce((s,p)=>s+deadlineScore(p),0)/Math.max(pmProjects.length,1)), safety=Math.round(pmProjects.reduce((s,p)=>s+safetyScore(p,state.period),0)/Math.max(pmProjects.length,1)), quality=Math.round(pmProjects.reduce((s,p)=>s+qualityScore(p,state.period),0)/Math.max(pmProjects.length,1)), overallScore=Math.round(dailyScore*.15+weeklyScore*.15+monthlyScore*.2+quarterlyScore*.1+yearlyScore*.1+profitability*.1+deadlines*.05+safety*.05+quality*.1);return{name:row.name,dailyActual:row.daily,dailyTarget:row.targetDaily,dailyScore,weeklyActual:row.weekly,weeklyTarget:row.targetWeekly,weeklyScore,monthlyActual:row.monthly,monthlyTarget:row.targetMonthly,monthlyScore,quarterlyActual:row.quarterly,quarterlyTarget:row.targetQuarterly,quarterlyScore,yearlyActual:row.yearly,yearlyTarget:row.targetYearly,yearlyScore,profitability,deadlines,safety,quality,cash:pmProjects.reduce((s,p)=>s+projectCashCollected(p,'Yearly'),0),actionCount:pmProjects.filter(p=>pct(periodRevenue(p,state.period),periodTarget(p,state.period))<100).length,overallScore}}).sort((a,b)=>b.overallScore-a.overallScore).map((row,idx)=>({...row,rank:idx+1}));
+  buildTable(pmTable,[{label:'Rank',class:'right'},{label:'PM'},{label:'Actual',class:'right'},{label:'Target',class:'right'},{label:'Score',class:'right'}],pmBalancedScorecard.slice(0,8).map(item=>[cell('#'+item.rank,'right'),cell(item.name),cell(money(item.dailyActual),'right'),cell(money(item.dailyTarget),'right'),cell(badge(item.dailyScore+'%',statusTone(item.dailyScore)),'right')]));
+  buildTable(scorecardTable,[{label:'Rank',class:'right'},{label:'PM'},{label:'Daily A',class:'right'},{label:'Daily T',class:'right'},{label:'Daily %',class:'right'},{label:'Weekly A',class:'right'},{label:'Weekly T',class:'right'},{label:'Weekly %',class:'right'},{label:'Monthly A',class:'right'},{label:'Monthly T',class:'right'},{label:'Monthly %',class:'right'},{label:'Quarter A',class:'right'},{label:'Quarter T',class:'right'},{label:'Quarter %',class:'right'},{label:'Year A',class:'right'},{label:'Year T',class:'right'},{label:'Year %',class:'right'},{label:'GP%',class:'right'},{label:'DDL',class:'right'},{label:'SFT',class:'right'},{label:'QLT',class:'right'},{label:'Cash',class:'right'},{label:'Acts',class:'right'},{label:'Overall',class:'right'}],pmBalancedScorecard.map(row=>[cell('#'+row.rank,'right'),cell(row.name),cell(money(row.dailyActual),'right'),cell(money(row.dailyTarget),'right'),cell(badge(row.dailyScore+'%',statusTone(row.dailyScore)),'right'),cell(money(row.weeklyActual),'right'),cell(money(row.weeklyTarget),'right'),cell(badge(row.weeklyScore+'%',statusTone(row.weeklyScore)),'right'),cell(money(row.monthlyActual),'right'),cell(money(row.monthlyTarget),'right'),cell(badge(row.monthlyScore+'%',statusTone(row.monthlyScore)),'right'),cell(money(row.quarterlyActual),'right'),cell(money(row.quarterlyTarget),'right'),cell(badge(row.quarterlyScore+'%',statusTone(row.quarterlyScore)),'right'),cell(money(row.yearlyActual),'right'),cell(money(row.yearlyTarget),'right'),cell(badge(row.yearlyScore+'%',statusTone(row.yearlyScore)),'right'),cell(row.profitability+'%','right'),cell(row.deadlines+'%','right'),cell(row.safety+'%','right'),cell(row.quality+'%','right'),cell(money(row.cash),'right'),cell(String(row.actionCount),'right'),cell(badge(row.overallScore+'%',statusTone(row.overallScore)),'right')]));
+  const actionLayer=filtered.map(project=>({...project,periodRevenue:periodRevenue(project,state.period),periodTarget:periodTarget(project,state.period),score:pct(periodRevenue(project,state.period),periodTarget(project,state.period)),gpPercent:parseNumber(project.Margin),qualityScore:qualityScore(project,state.period),deadlineScore:deadlineScore(project),safetyScore:safetyScore(project,state.period),cashCollected:projectCashCollected(project,state.period),actionOwner:project.Manager,actionDue:project.EndDate||'',actionStatus:pct(periodRevenue(project,state.period),periodTarget(project,state.period))>=100?'Closed':(pct(periodRevenue(project,state.period),periodTarget(project,state.period))>=70?'In Progress':'Escalated'),recovery:pct(periodRevenue(project,state.period),periodTarget(project,state.period))>=100?'On track':'Increase collections, accelerate delivery and close outstanding activities'})).sort((a,b)=>a.score-b.score);
+  buildTable(projectPerfTable,[{label:'Project'},{label:'Revenue',class:'right'},{label:'Target',class:'right'},{label:'Profit',class:'right'},{label:'Deadline',class:'right'},{label:'Quality',class:'right'}],actionLayer.map(item=>[cell(`<div><div style="font-weight:600;">${item.ProjectName}</div><div class="muted" style="font-size:12px;">${item.Division} • ${item.Manager}</div></div>`),cell(money(item.periodRevenue),'right'),cell(money(item.periodTarget),'right'),cell(badge(item.gpPercent+'%',statusTone(item.gpPercent*4)),'right'),cell(badge(item.deadlineScore+'%',statusTone(item.deadlineScore)),'right'),cell(badge(item.qualityScore+'%',statusTone(item.qualityScore)),'right')]));
+  buildTable(orderBookTable,[{label:'Division'},{label:'Manager'},{label:'Project'},{label:'Status'},{label:'Total Income',class:'right'},{label:'Margin',class:'right'},{label:'Gross Profit',class:'right'}],projects.map(p=>[cell(p.Division),cell(p.Manager),cell(`<strong>${p.ProjectName}</strong>`),cell(badge(p.Status,p.Status==='Confirmed'?'b-green':'b-amber')),cell(money(p.TotalIncome),'right'),cell(parseNumber(p.Margin).toFixed(0)+'%','right'),cell(money(parseNumber(p.TotalIncome)*(parseNumber(p.Margin)/100)),'right')]));
+  buildTable(perfTable,[{label:'Manager'},{label:'Actual',class:'right'},{label:'Target',class:'right'},{label:'Achievement',class:'right'},{label:'Quality',class:'right'},{label:'Safety',class:'right'},{label:'Status',class:'right'}],pmBalancedScorecard.map(item=>[cell(item.name),cell(money(item.yearlyActual),'right'),cell(money(item.yearlyTarget),'right'),cell(badge(item.yearlyScore+'%',statusTone(item.yearlyScore)),'right'),cell(item.quality+'%','right'),cell(item.safety+'%','right'),cell(badge(item.overallScore>=80?'On Track':item.overallScore>=50?'At Risk':'Behind',statusTone(item.overallScore)),'right')]));
+  buildTable(managerComparisonTable,[{label:'Rank',class:'right'},{label:'Manager'},{label:'Actual',class:'right'},{label:'Target',class:'right'},{label:'Variance',class:'right'},{label:'Variance %',class:'right'},{label:'Status',class:'right'}],pmBalancedScorecard.map(item=>{const variance=item.dailyActual-item.dailyTarget;const vp=item.dailyTarget>0?(variance/item.dailyTarget)*100:0;return [cell('#'+item.rank,'right'),cell(item.name),cell(money(item.dailyActual),'right'),cell(money(item.dailyTarget),'right'),cell(`<span style="color:${variance>=0?'#15803d':'#b91c1c'}">${money(variance)}</span>`,'right'),cell(vp.toFixed(1)+'%','right'),cell(badge(vp>=0?'Above Target':vp>=-20?'Slightly Behind':'Behind',vp>=0?'b-green':vp>=-20?'b-amber':'b-red'),'right')] }));
+  buildTable(timelineTable,[{label:'Project'},{label:'Manager'},{label:'Start'},{label:'End'},{label:'Time Progress',class:'right'},{label:'Status',class:'right'}],filtered.map(project=>{const start=safeDate(project.StartDate),end=safeDate(project.EndDate),progress=deadlineScore(project),status=progress>=100?'Completed':progress>=75?'Near Completion':progress>=50?'In Progress':progress>0?'Early Stage':'Not Started';return [cell(project.ProjectName),cell(project.Manager),cell(start?start.toLocaleDateString():'-'),cell(end?end.toLocaleDateString():'-'),cell(progress+'%','right'),cell(badge(status,statusTone(progress)),'right')] }));
+  actionSummary.innerHTML=actionLayer.slice(0,4).map(item=>`<div class="action-mini"><div style="display:flex;justify-content:space-between;gap:12px;align-items:flex-start;"><div><div style="font-weight:600;">${item.ProjectName}</div><div class="muted" style="font-size:12px; margin-top:4px;">Owner: ${item.actionOwner}</div></div>${badge(item.actionStatus,actionTone(item.actionStatus))}</div><div style="margin-top:10px;color:var(--muted);font-size:14px;">Due: ${item.actionDue||'-'}</div><div style="margin-top:10px;">${item.recovery}</div></div>`).join('');
+  const divisionMix=divisionAtGlance.map((row,idx)=>({name:row.name,value:row.actual,color:DIVISION_COLORS[idx%DIVISION_COLORS.length]}));
+  divisionMixLegend.innerHTML=divisionMix.map(item=>`<div style="display:flex;justify-content:space-between;align-items:center;font-size:14px;margin-top:10px;"><div style="display:flex;align-items:center;gap:8px;"><span style="width:12px;height:12px;display:inline-block;border-radius:50%;background:${item.color};"></span>${item.name}</div><strong>${money(item.value)}</strong></div>`).join('');
+  renderCharts(divisionAtGlance.map(d=>({name:d.name,target:d.target,actual:d.actual})),divisionMix);
+  document.querySelectorAll('[data-kpi]').forEach(el=>el.onclick=()=>{const key=el.getAttribute('data-kpi');state.activeKpi=state.activeKpi===key?'all':key;render()});
+}
+function renderCharts(performanceTrend, divisionMix){
+  Object.values(charts).forEach(chart=>chart&&chart.destroy&&chart.destroy());charts={};
+  charts.bar=new Chart(barChart,{type:'bar',data:{labels:performanceTrend.map(d=>d.name),datasets:[{label:'Target',data:performanceTrend.map(d=>d.target),backgroundColor:'#cbd5e1',borderRadius:10},{label:'Actual',data:performanceTrend.map(d=>d.actual),backgroundColor:'#0f172a',borderRadius:10}]},options:{responsive:true,maintainAspectRatio:false,plugins:{tooltip:{callbacks:{label:(ctx)=>`${ctx.dataset.label}: ${money(ctx.raw)}`}}},scales:{y:{ticks:{callback:(v)=>Math.round(v/1000)+'k'},grid:{color:'#e2e8f0'}},x:{grid:{display:false}}}}});
+  charts.pie=new Chart(pieChart,{type:'doughnut',data:{labels:divisionMix.map(d=>d.name),datasets:[{data:divisionMix.map(d=>d.value),backgroundColor:divisionMix.map(d=>d.color),borderWidth:0}]},options:{responsive:true,maintainAspectRatio:false,cutout:'60%',plugins:{legend:{display:false},tooltip:{callbacks:{label:(ctx)=>`${ctx.label}: ${money(ctx.raw)}`}}}}});
+  charts.area=new Chart(areaChart,{type:'line',data:{labels:performanceTrend.map(d=>d.name),datasets:[{label:'Target',data:performanceTrend.map(d=>d.target),borderColor:'#94a3b8',backgroundColor:'rgba(203,213,225,.35)',fill:true,tension:.35},{label:'Actual',data:performanceTrend.map(d=>d.actual),borderColor:'#0f172a',backgroundColor:'rgba(15,23,42,.12)',fill:true,tension:.35}]},options:{responsive:true,maintainAspectRatio:false,plugins:{tooltip:{callbacks:{label:(ctx)=>`${ctx.dataset.label}: ${money(ctx.raw)}`}}},scales:{y:{ticks:{callback:(v)=>Math.round(v/1000)+'k'},grid:{color:'#e2e8f0'}},x:{grid:{display:false}}}}});
+}
+async function submitProject(){
+  const project={projectName:projectName.value.trim(),costCentre:costCentre.value.trim()||'Onpoint Group',manager:projectManager.value,status:projectStatus.value,totalIncome:parseNumber(totalIncome.value),margin:parseNumber(margin.value),startDate:projectStartDate.value,endDate:projectEndDate.value};
+  if(!project.projectName||!project.manager||project.totalIncome<=0){alert('Please fill project name, manager and total income.');return}
+  showLoading('Saving project...');
+  try{const res=await fetch(CONFIG.SCRIPT_URL,{method:'POST',body:JSON.stringify({action:'addProject',data:project})});const text=await res.text();let result;try{result=JSON.parse(text)}catch{result={success:false}};if(result.success){alert('Project saved.');projectName.value='';totalIncome.value='';margin.value='25';projectStartDate.value='';projectEndDate.value='';await loadAllData()}else alert('Could not save project.')}catch(err){console.error(err);alert('Failed to save project.')}finally{hideLoading()}
+}
+async function submitDailyRevenueWithQuality(){
+  const revenue={date:revDate.value,manager:revManager.value,projectName:revProjectName.value,amount:parseNumber(revAmount.value),quality:parseNumber(qualityScoreInput.value)||80,safety:parseNumber(safetyIncidentsInput.value)||0};
+  if(!revenue.date||!revenue.manager||!revenue.projectName||revenue.amount<=0){alert('Please fill all revenue fields.');return}
+  showLoading('Saving revenue...');
+  try{const res=await fetch(CONFIG.SCRIPT_URL,{method:'POST',body:JSON.stringify({action:'addRevenue',data:revenue})});const text=await res.text();let result;try{result=JSON.parse(text)}catch{result={success:false}};if(result.success){alert('Revenue saved.');revAmount.value='';safetyIncidentsInput.value='0';calculateVariance();await loadAllData()}else alert('Could not save revenue.')}catch(err){console.error(err);alert('Failed to save revenue.')}finally{hideLoading()}
+}
+async function submitInvoice(){
+  const invoice={date:invDate.value,manager:invManager.value,projectName:invProjectName.value,amount:parseNumber(invAmount.value),paymentReceived:paymentReceived.value==='true',paymentDate:paymentDate.value};
+  if(!invoice.date||!invoice.manager||!invoice.projectName||invoice.amount<=0){alert('Please fill all invoice fields.');return}
+  showLoading('Saving invoice...');
+  try{const res=await fetch(CONFIG.SCRIPT_URL,{method:'POST',body:JSON.stringify({action:'addInvoice',data:invoice})});const text=await res.text();let result;try{result=JSON.parse(text)}catch{result={success:false}};if(result.success){alert('Invoice saved.');invAmount.value='';paymentReceived.value='false';paymentDate.value='';await loadAllData()}else alert('Could not save invoice.')}catch(err){console.error(err);alert('Failed to save invoice.')}finally{hideLoading()}
+}
+function exportCsv(){
+  const rows=filteredProjects().map(row=>({Division:row.Division,Manager:row.Manager,Project:row.ProjectName,Status:row.Status,TotalIncome:row.TotalIncome,Margin:row.Margin,Revenue:periodRevenue(row,state.period),Target:periodTarget(row,state.period),GrossProfit:parseNumber(row.TotalIncome)*(parseNumber(row.Margin)/100)}));
+  if(!rows.length){alert('No rows to export.');return}
+  const headers=Object.keys(rows[0]).join(','), body=rows.map(r=>Object.values(r).map(v=>`"${String(v).replaceAll('"','""')}"`).join(',')).join('\n'), blob=new Blob([headers+'\n'+body],{type:'text/csv;charset=utf-8;'}), url=URL.createObjectURL(blob), a=document.createElement('a');a.href=url;a.download=`onpoint-dashboard-${state.period.toLowerCase()}.csv`;a.click();URL.revokeObjectURL(url)
+}
+function initTabs(){document.querySelectorAll('.tab').forEach(btn=>btn.addEventListener('click',()=>{document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active'));btn.classList.add('active');document.getElementById(btn.dataset.tab).classList.add('active')}))}
+function initEvents(){period.addEventListener('change',e=>{state.period=e.target.value;render()});division.addEventListener('change',e=>{state.division=e.target.value;render()});managerFilter.addEventListener('change',e=>{state.manager=e.target.value;render()});query.addEventListener('input',e=>{state.query=e.target.value;render()});clearFilterBtn.addEventListener('click',()=>{state.activeKpi='all';render()});revManager.addEventListener('change',updateDailyBudgetWithMemory);revProjectName.addEventListener('change',updateDailyBudgetWithMemory);revAmount.addEventListener('input',calculateVariance);saveProjectBtn.addEventListener('click',submitProject);saveRevenueBtn.addEventListener('click',submitDailyRevenueWithQuality);saveInvoiceBtn.addEventListener('click',submitInvoice);exportBtn.addEventListener('click',exportCsv);refreshBtn.addEventListener('click',loadAllData)}
+function initDefaults(){revDate.value=todayISO();invDate.value=todayISO()}
+function init(){loadBudgetMemoryFromStorage();initTabs();initEvents();initDefaults();makeBudgetEditable();loadAllData();setInterval(loadAllData,900000)}
+init();
+</script>
+</body>
+</html>
