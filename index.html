@@ -501,6 +501,21 @@
     function actualBudgetForPeriod(periodLabel, filters = {}){
       return periodRevenueRows(periodLabel, filters).reduce((sum, row) => sum + num(row.budget), 0);
     }
+    function projectMatchesQuery(project, queryText = ''){
+      const query = String(queryText || '').trim().toLowerCase();
+      if (!query) return true;
+      return `${project.project} ${project.pm} ${project.division} ${project.client}`.toLowerCase().includes(query);
+    }
+    function rowMatchesQuery(row, queryText = ''){
+      const query = String(queryText || '').trim().toLowerCase();
+      if (!query) return true;
+      return `${row.projectName} ${row.manager} ${row.costCenter}`.toLowerCase().includes(query);
+    }
+    function sumProjectTargetsForPeriodWithQuery(periodLabel, filters = {}, queryText = ''){
+      return projectsData
+        .filter(project => projectMatchesFilters(project, filters) && projectMatchesQuery(project, queryText))
+        .reduce((sum, project) => sum + projectTargetForPeriod(project, periodLabel), 0);
+    }
     function invoiceTotalForPeriod(periodLabel, filters = {}){
       return invoiceData.filter(row => {
         if (!isDateInPeriod(row.date, periodLabel)) return false;
@@ -869,35 +884,42 @@
     function render(){
       const filtered = filteredProjects();
       const activeBucket = state.period.toLowerCase();
+      const baseFilters = { costCenter: state.division, manager: state.manager, project: 'All' };
+      const periodSummaries = Object.fromEntries(PERIODS.map(label => {
+        const rows = periodRevenueRows(label, baseFilters).filter(row => rowMatchesQuery(row, state.query));
+        const actual = rows.reduce((sum, row) => sum + num(row.amount), 0);
+        const target = sumProjectTargetsForPeriodWithQuery(label, baseFilters, state.query);
+        const cash = invoiceTotalForPeriod(label, baseFilters);
+        const profitability = profitabilityForRows(rows);
+        return [label, { rows, actual, target, cash, profitability, achievement: pct(actual, target), cashConversion: pct(cash, actual) }];
+      }));
+      const activeSummary = periodSummaries[state.period];
       const groupRollup = aggregateGroup(filtered);
       const divisionRollup = aggregateDimensionFromSheets('division', { costCenter: state.division, manager: state.manager, project: 'All' });
       const pmRollup = aggregateDimensionFromSheets('pm', { costCenter: state.division, manager: 'All', project: 'All' });
-      const filteredRevenueRows = periodRevenueRows(state.period, {
-        costCenter: state.division,
-        manager: state.manager
-      }).filter(row => !state.query || `${row.costCenter} ${row.manager} ${row.projectName}`.toLowerCase().includes(state.query.toLowerCase()));
-      const filteredActualRevenue = filteredRevenueRows.reduce((sum,row)=>sum + num(row.amount), 0);
-      const filteredTargetRevenue = sumProjectTargets(state.period, { costCenter: state.division, manager: state.manager });
+      const filteredRevenueRows = activeSummary.rows;
+      const filteredActualRevenue = activeSummary.actual;
+      const filteredTargetRevenue = activeSummary.target;
       const totals = {
         revenue: filteredActualRevenue,
         target: filteredTargetRevenue,
-        cash: groupRollup.cash[activeBucket],
-        margin: Math.round((profitabilityForRows(filteredRevenueRows) / 100) * filteredActualRevenue),
+        cash: activeSummary.cash,
+        margin: Math.round((activeSummary.profitability / 100) * filteredActualRevenue),
         deadline: groupRollup.deadlines[activeBucket],
         safety: groupRollup.safety[activeBucket],
         quality: groupRollup.quality[activeBucket]
       };
-      const revenueAchievement = pct(totals.revenue, totals.target), profitability = profitabilityForRows(filteredRevenueRows) || groupRollup.profitability[activeBucket] || Math.round((totals.margin/Math.max(totals.revenue,1))*100), deadlineScore = Math.round(totals.deadline), safetyScore = Math.round(totals.safety), qualityScore = Math.round(totals.quality), cashConversion = pct(totals.cash, Math.max(totals.revenue,1));
+      const revenueAchievement = pct(totals.revenue, totals.target), profitability = activeSummary.profitability || groupRollup.profitability[activeBucket] || Math.round((totals.margin/Math.max(totals.revenue,1))*100), deadlineScore = Math.round(totals.deadline), safetyScore = Math.round(totals.safety), qualityScore = Math.round(totals.quality), cashConversion = activeSummary.cashConversion || pct(totals.cash, Math.max(totals.revenue,1));
       const allProjects = enrichedProjects();
       const confirmedTotal = allProjects.filter(p => String(p.status).toLowerCase() === 'confirmed').reduce((s,p) => s + p.totalIncome, 0);
       const forecastTotal = allProjects.filter(p => String(p.status).toLowerCase() === 'forecast').reduce((s,p) => s + p.totalIncome, 0);
       const totalOrderBook = confirmedTotal + forecastTotal;
-      const ytd = periodRevenueRows('Yearly').reduce((s,r) => s + num(r.amount), 0);
+      const ytd = periodSummaries['Yearly'].actual;
       const btye = Math.max(0, confirmedTotal - ytd);
-      const mtd = periodRevenueRows('Monthly').reduce((s,r) => s + num(r.amount), 0);
-      const dailyRows = periodRevenueRows('Daily');
-      const dailyActualTotal = dailyRows.reduce((s,r) => s + num(r.amount), 0);
-      const dailyTargetTotal = sumProjectTargets('Daily');
+      const mtd = periodSummaries['Monthly'].actual;
+      const dailyRows = periodSummaries['Daily'].rows;
+      const dailyActualTotal = periodSummaries['Daily'].actual;
+      const dailyTargetTotal = periodSummaries['Daily'].target;
 
       byId('headlineKpis').innerHTML = [
         { title:'Total Confirmed', value:money(confirmedTotal), sub:'All confirmed from Projects' },
@@ -926,18 +948,18 @@
       byId('clearFilterBtn').style.display = state.activeKpi==='all' ? 'none' : 'inline-block';
 
       byId('summaryGrid').innerHTML = PERIODS.map(label => {
-        const key = label.toLowerCase();
-        const revenueValue = label === 'Daily' ? dailyActualTotal : groupRollup.revenue[key];
-        const targetValue = label === 'Daily' ? dailyTargetTotal : groupRollup.target[key];
-        const achievementValue = pct(revenueValue, targetValue);
+        const summary = periodSummaries[label];
+        const revenueValue = summary.actual;
+        const targetValue = summary.target;
+        const achievementValue = summary.achievement;
         return `<div class="summary-box"><div class="muted" style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;">${label}</div><div class="big">${money(revenueValue)}</div><div class="muted" style="margin-top:6px;">Target ${money(targetValue)}</div><div style="display:flex;justify-content:space-between;align-items:center;margin-top:14px;"><span class="muted">Achievement</span>${badge(achievementValue+'%', statusTone(achievementValue))}</div></div>`;
       }).join('');
 
-      const budgetVsActualRisk = ['Daily','Weekly','Monthly','Yearly'].map(label => {
-        const key = label.toLowerCase();
-        const budget = label === 'Daily' ? dailyTargetTotal : groupRollup.target[key];
-        const actual = label === 'Daily' ? dailyActualTotal : groupRollup.revenue[key];
-        const achievement = pct(actual, budget);
+      const budgetVsActualRisk = ['Daily','Weekly','Monthly','Quarterly','Yearly'].map(label => {
+        const summary = periodSummaries[label];
+        const budget = summary.target;
+        const actual = summary.actual;
+        const achievement = summary.achievement;
         return { label, budget, actual, gap: budget - actual, achievement, riskTone:achievement>=85?'b-green':achievement>=65?'b-amber':'b-red', risk:achievement>=85?'Low':achievement>=65?'Medium':'High' };
       });
       buildTable(byId('budgetRiskTable'), [{label:'Period'},{label:'Budget',class:'right'},{label:'Actual',class:'right'},{label:'Gap',class:'right'},{label:'Ach %',class:'right'},{label:'Risk',class:'right'}], budgetVsActualRisk.map(item => [cell(item.label),cell(money(item.budget),'right'),cell(money(item.actual),'right'),cell(`<span style="color:${item.gap>0?'#b91c1c':'#15803d'}">${money(item.gap)}</span>`,'right'),cell(item.achievement+'%','right'),cell(badge(item.risk,item.riskTone),'right')]));
