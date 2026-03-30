@@ -306,7 +306,7 @@
   </div>
 
   <script>
-    const DEFAULT_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwHn1kv5V8DM-v7_nDWWvKHDbXBAxRV_0cgPVJwG8gi3wjX1Y_pJK69OiV5w_af_4SRSw/exec';
+    const DEFAULT_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz4CMKGdXAzlrTDDYcKN1BjCRu8HsQOEs5lVeQ0B5jWK4fTN8fZcNqpTo-OXAncg5hKyQ/exec';
     const STORAGE_KEYS = { scriptUrl:'onpoint.scriptUrl', fallbackMode:'onpoint.fallbackMode', revenueBudgetMemory:'onpoint.revenueBudgetMemory', formDraft:'onpoint.formDraft' };
     const PERIODS = ['Daily','Weekly','Monthly','Quarterly','Yearly'];
     const DIVISION_COLORS = ['#0f172a','#334155','#475569','#64748b','#94a3b8','#1e293b','#475569'];
@@ -576,6 +576,7 @@
     const MONTH_SHORT = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
     const STRAIGHT_LINE_MONTHLY_BUDGET = 22000000;
     const REPORTING_MONTH_DATE = new Date(2026, 2, 1);
+    const PROJECTED_MONTHLY_BUDGET_MAR26 = 56140157;
     const MANAGER_STRAIGHT_LINE_MONTHLY_TARGETS = {
       'johan': 5000000,
       'moses': 4040000,
@@ -597,6 +598,19 @@
       0: ['Jan27','Jan 27','January 2027','January-2027','January_2027','January27','V'],
       1: ['Feb27','Feb 27','February 2027','February-2027','February_2027','February27','W']
     };
+    function scaleMonthlyProjectedBudgetForPeriod(monthly, periodLabel, dateLike = REPORTING_MONTH_DATE){
+      const d = safeDate(dateLike) || REPORTING_MONTH_DATE;
+      if (periodLabel === 'Daily') return monthly / Math.max(daysInMonth(d), 1);
+      if (periodLabel === 'Weekly') return (monthly / Math.max(daysInMonth(d), 1)) * 7;
+      if (periodLabel === 'Monthly') return monthly;
+      if (periodLabel === 'Quarterly') return monthly * 3;
+      if (periodLabel === 'Yearly') return monthly * 12;
+      return monthly;
+    }
+    function allFiltersCleared(filters = {}){
+      return (!filters.costCenter || filters.costCenter === 'All') && (!filters.manager || filters.manager === 'All') && (!filters.project || filters.project === 'All');
+    }
+
     function managerStraightLineMonthlyBudget(manager){
       const row = getManagerBudgetRow(manager);
       if (row && num(row.budget) > 0) return num(row.budget);
@@ -690,26 +704,21 @@
     function getMonthTargetForProject(project, dateLike = REPORTING_MONTH_DATE){
       const d = safeDate(dateLike) || REPORTING_MONTH_DATE;
       const monthIndex = d.getMonth();
-      if (project?.monthlyTargets && Object.prototype.hasOwnProperty.call(project.monthlyTargets, monthIndex)) {
-        return num(project.monthlyTargets[monthIndex]);
-      }
-      const lookup = buildRowLookup(project?.raw || {});
-      const aliases = FISCAL_MONTH_COLUMN_ALIASES[monthIndex] || [];
-      const explicit = firstNumericFromLookup(lookup, aliases);
-      if (explicit != null) return num(explicit);
+      if (project?.monthlyTargets && Object.prototype.hasOwnProperty.call(project.monthlyTargets, monthIndex)) return num(project.monthlyTargets[monthIndex]);
       if (num(project?.monthlyTarget) > 0) return num(project.monthlyTarget);
-      return 0;
+      const annual = num(project?.totalIncome);
+      return annual ? annual / 12 : 0;
     }
     function projectMatchesFilters(project, filters = {}){
       if (filters.costCenter && filters.costCenter !== 'All' && normalizeCostCenterName(project.division) !== normalizeCostCenterName(filters.costCenter)) return false;
       if (filters.manager && filters.manager !== 'All' && !sameText(project.pm, filters.manager)) return false;
-      if (filters.project && filters.project !== 'All' && !sameText(project.project, filters.project)) return false;
+      if (filters.project && filters.project !== 'All' && project.project !== filters.project) return false;
       return true;
     }
     function projectTargetForPeriod(project, period, dateLike = REPORTING_MONTH_DATE){
       const d = safeDate(dateLike) || REPORTING_MONTH_DATE;
       const monthTarget = getMonthTargetForProject(project, d);
-      const annual = monthTarget * 12;
+      const annual = monthTarget ? monthTarget * 12 : num(project?.totalIncome);
       if (period === 'Daily') return monthTarget / Math.max(daysInMonth(d), 1);
       if (period === 'Weekly') return (monthTarget / Math.max(daysInMonth(d), 1)) * 7;
       if (period === 'Monthly') return monthTarget;
@@ -718,9 +727,12 @@
       return monthTarget;
     }
     function sumProjectTargets(periodLabel, filters = {}, dateLike = REPORTING_MONTH_DATE){
-      return projectsData
+      const filteredTotal = projectsData
         .filter(project => projectMatchesFilters(project, filters))
         .reduce((sum, project) => sum + projectTargetForPeriod(project, periodLabel, dateLike), 0);
+      if (filteredTotal > 0) return filteredTotal;
+      if (allFiltersCleared(filters)) return scaleMonthlyProjectedBudgetForPeriod(PROJECTED_MONTHLY_BUDGET_MAR26, periodLabel, dateLike);
+      return 0;
     }
     function straightLineBudgetForPeriod(periodLabel, filters = {}){
       return fixedStraightLineBudgetForPeriod(periodLabel, filters);
@@ -870,7 +882,7 @@
           startDate: normaliseDate(row.StartDate || row.startDate),
           endDate: normaliseDate(row.EndDate || row.endDate),
           monthlyTargets,
-          monthlyTarget: explicitMarch != null ? num(explicitMarch) : (genericMonthlyTarget != null ? num(genericMonthlyTarget) : 0),
+          monthlyTarget: genericMonthlyTarget != null ? num(genericMonthlyTarget) : (monthlyTargets[2] || 0),
           raw: row
         };
       });
@@ -1406,7 +1418,7 @@
       const baseFilters = { costCenter: state.division, manager: state.manager, project: 'All' };
       const periodSummaries = Object.fromEntries(PERIODS.map(label => {
         const rows = periodRevenueRows(label, baseFilters).filter(row => rowMatchesQuery(row, state.query));
-        const actual = actualRevenueForPeriod(label, baseFilters);
+        const actual = rows.reduce((sum, row) => sum + num(row.amount), 0);
         const projectedTarget = sumProjectTargetsForPeriodWithQuery(label, baseFilters, state.query);
         const straightLineBudget = straightLineBudgetForPeriod(label, baseFilters);
         const target = effectiveBudgetTarget(projectedTarget, straightLineBudget);
@@ -1850,3 +1862,4 @@ ${error.message}`);
   </script>
 </body>
 </html>
+
