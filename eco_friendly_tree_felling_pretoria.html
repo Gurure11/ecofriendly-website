@@ -1,0 +1,1503 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Eco Friendly Tree Felling Pretoria offers professional tree felling, stump removals, refuse removals and gardening services in Pretoria East." />
+  <meta name="keywords" content="tree felling Pretoria, stump removal Pretoria, refuse removal Pretoria, gardening services Pretoria" />
+  <meta name="theme-color" content="#1f7a3f" />
+  <title>Eco Friendly Tree Felling Pretoria</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Manrope:wght@500;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  <style>
+    :root {
+      --primary: #1f7a3f;
+      --primary-dark: #14542a;
+      --accent: #99d95d;
+      --gold: #f6c453;
+      --ink: #132216;
+      --text: #314235;
+      --muted: #6f7f71;
+      --white: #ffffff;
+      --soft: #f6faf6;
+      --card: rgba(255,255,255,0.92);
+      --border: rgba(31,122,63,0.12);
+      --shadow: 0 18px 50px rgba(12, 47, 22, 0.12);
+      --radius: 24px;
+      --max: 1220px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+      color: var(--text);
+      background: linear-gradient(180deg, #f4faf3 0%, #ffffff 32%, #f7fbf8 100%);
+      overflow-x: hidden;
+    }
+
+    img { max-width: 100%; display: block; }
+    a { color: inherit; text-decoration: none; }
+
+    .container {
+      width: min(100% - 32px, var(--max));
+      margin: 0 auto;
+    }
+
+    .section {
+      padding: 90px 0;
+      position: relative;
+    }
+
+    .section-title {
+      font-family: 'Manrope', sans-serif;
+      font-size: clamp(2rem, 4vw, 3rem);
+      line-height: 1.1;
+      color: var(--ink);
+      margin: 0 0 14px;
+    }
+
+    .section-kicker {
+      color: var(--primary);
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      font-weight: 800;
+      font-size: 0.78rem;
+      margin-bottom: 14px;
+    }
+
+    .section-subtitle {
+      max-width: 760px;
+      font-size: 1.02rem;
+      color: var(--muted);
+      line-height: 1.8;
+      margin: 0 0 26px;
+    }
+
+    .topbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      background: rgba(255,255,255,0.78);
+      backdrop-filter: blur(18px);
+      border-bottom: 1px solid rgba(20, 84, 42, 0.08);
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      min-height: 80px;
+      gap: 20px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      min-width: 0;
+    }
+
+    .brand-badge {
+      width: 54px;
+      height: 54px;
+      border-radius: 18px;
+      display: grid;
+      place-items: center;
+      color: var(--white);
+      background: linear-gradient(135deg, var(--primary), #2ca75a);
+      box-shadow: 0 12px 30px rgba(31, 122, 63, 0.25);
+      font-size: 1.3rem;
+    }
+
+    .brand h1 {
+      font-family: 'Manrope', sans-serif;
+      font-size: 1rem;
+      line-height: 1.1;
+      margin: 0;
+      color: var(--ink);
+    }
+
+    .brand span {
+      display: block;
+      font-size: 0.79rem;
+      color: var(--muted);
+      font-weight: 600;
+      margin-top: 4px;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      font-weight: 600;
+      color: #25432c;
+    }
+
+    .nav-links a {
+      position: relative;
+      padding: 6px 0;
+    }
+
+    .nav-links a::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      width: 0;
+      height: 2px;
+      background: var(--primary);
+      transition: width 0.25s ease;
+    }
+
+    .nav-links a:hover::after,
+    .nav-links a:focus-visible::after { width: 100%; }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .btn,
+    button.btn {
+      border: 0;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 14px 22px;
+      border-radius: 999px;
+      font-weight: 800;
+      font-size: 0.95rem;
+      transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
+    }
+
+    .btn:hover,
+    button.btn:hover { transform: translateY(-2px); }
+
+    .btn-primary {
+      color: var(--white);
+      background: linear-gradient(135deg, var(--primary), #239752);
+      box-shadow: 0 16px 36px rgba(31, 122, 63, 0.24);
+    }
+
+    .btn-outline {
+      color: var(--primary);
+      background: rgba(31, 122, 63, 0.08);
+      border: 1px solid rgba(31, 122, 63, 0.14);
+    }
+
+    .mobile-toggle {
+      display: none;
+      width: 48px;
+      height: 48px;
+      border-radius: 14px;
+      background: rgba(31, 122, 63, 0.08);
+      color: var(--primary);
+      border: 0;
+      font-size: 1.1rem;
+      cursor: pointer;
+    }
+
+    .hero {
+      position: relative;
+      min-height: 100svh;
+      display: grid;
+      align-items: center;
+      padding-top: 110px;
+      overflow: hidden;
+      isolation: isolate;
+    }
+
+    .hero-slider {
+      position: absolute;
+      inset: 0;
+      z-index: -3;
+    }
+
+    .hero-slide {
+      position: absolute;
+      inset: 0;
+      background-size: cover;
+      background-position: center;
+      opacity: 0;
+      transform: scale(1.06);
+      animation: heroFade 36s infinite;
+    }
+
+    .hero-slide::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle at 20% 20%, rgba(153, 217, 93, 0.22), transparent 35%),
+        linear-gradient(110deg, rgba(10, 24, 13, 0.78) 10%, rgba(13, 50, 23, 0.70) 45%, rgba(18, 64, 31, 0.46) 100%);
+    }
+
+    .hero-slide:nth-child(1) { background-image: url('3.jpg'); animation-delay: 0s; }
+    .hero-slide:nth-child(2) { background-image: url('1.jpg'); animation-delay: 4s; }
+    .hero-slide:nth-child(3) { background-image: url('grass1.jpeg'); animation-delay: 8s; }
+    .hero-slide:nth-child(4) { background-image: url('grass2.jpeg'); animation-delay: 12s; }
+    .hero-slide:nth-child(5) { background-image: url('2.jpg'); animation-delay: 16s; }
+    .hero-slide:nth-child(6) { background-image: url('5.webp'); animation-delay: 20s; }
+    .hero-slide:nth-child(7) { background-image: url('7webp'); animation-delay: 24s; }
+    .hero-slide:nth-child(8) { background-image: url('unnamed.webp'); animation-delay: 28s; }
+    .hero-slide:nth-child(9) { background-image: url('Boston.webp'); animation-delay: 32s; }
+
+    @keyframes heroFade {
+      0% { opacity: 0; transform: scale(1.08); }
+      4% { opacity: 1; }
+      10% { opacity: 1; transform: scale(1); }
+      16% { opacity: 0; transform: scale(1.02); }
+      100% { opacity: 0; }
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 36px;
+      align-items: end;
+    }
+
+    .hero-copy {
+      color: var(--white);
+      padding: 28px 0 54px;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 16px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.12);
+      border: 1px solid rgba(255,255,255,0.15);
+      backdrop-filter: blur(12px);
+      font-size: 0.84rem;
+      font-weight: 700;
+      margin-bottom: 18px;
+    }
+
+    .hero h2 {
+      font-family: 'Manrope', sans-serif;
+      font-size: clamp(2.8rem, 6vw, 5.4rem);
+      line-height: 0.96;
+      margin: 0 0 18px;
+      letter-spacing: -0.04em;
+    }
+
+    .hero p {
+      font-size: 1.08rem;
+      line-height: 1.85;
+      max-width: 710px;
+      color: rgba(255,255,255,0.88);
+      margin: 0 0 26px;
+    }
+
+    .hero-actions,
+    .social-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+    }
+
+    .hero-badges {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 26px;
+      max-width: 760px;
+    }
+
+    .hero-badge {
+      padding: 16px 18px;
+      border-radius: 18px;
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.12);
+      backdrop-filter: blur(14px);
+    }
+
+    .hero-badge strong {
+      display: block;
+      font-size: 1.12rem;
+      margin-bottom: 6px;
+      color: #fff;
+    }
+
+    .hero-badge span {
+      color: rgba(255,255,255,0.82);
+      font-size: 0.92rem;
+      line-height: 1.5;
+    }
+
+    .quote-card {
+      background: rgba(255,255,255,0.92);
+      border-radius: 30px;
+      padding: 28px;
+      box-shadow: var(--shadow);
+      border: 1px solid rgba(255,255,255,0.3);
+      backdrop-filter: blur(10px);
+      color: var(--ink);
+    }
+
+    .quote-card h3 {
+      margin: 0 0 14px;
+      font-family: 'Manrope', sans-serif;
+      font-size: 1.5rem;
+    }
+
+    .quote-card p {
+      color: var(--muted);
+      margin: 0 0 18px;
+      line-height: 1.75;
+    }
+
+    .quote-list {
+      display: grid;
+      gap: 12px;
+      margin: 20px 0 22px;
+    }
+
+    .quote-item {
+      display: flex;
+      gap: 12px;
+      align-items: start;
+      padding: 14px 16px;
+      border-radius: 18px;
+      background: rgba(31,122,63,0.05);
+    }
+
+    .quote-item i {
+      color: var(--primary);
+      font-size: 1rem;
+      margin-top: 4px;
+    }
+
+    .quote-mini {
+      display: flex;
+      justify-content: space-between;
+      gap: 14px;
+      margin-top: 16px;
+      padding-top: 18px;
+      border-top: 1px solid rgba(31,122,63,0.1);
+      font-size: 0.92rem;
+      color: var(--muted);
+    }
+
+    .floating-elements {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    .leaf,
+    .bird,
+    .bubble {
+      position: absolute;
+      opacity: 0.68;
+      animation-timing-function: ease-in-out;
+      animation-iteration-count: infinite;
+    }
+
+    .leaf {
+      color: rgba(153, 217, 93, 0.7);
+      font-size: 26px;
+      animation-name: floatLeaf;
+      animation-duration: 10s;
+    }
+
+    .bird {
+      color: rgba(255,255,255,0.75);
+      font-size: 22px;
+      animation-name: birdDrift;
+      animation-duration: 12s;
+    }
+
+    .bubble {
+      width: 18px;
+      height: 18px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.16);
+      animation-name: softRise;
+      animation-duration: 8s;
+    }
+
+    @keyframes floatLeaf {
+      0%, 100% { transform: translateY(0) rotate(0deg); }
+      50% { transform: translateY(-18px) rotate(14deg); }
+    }
+
+    @keyframes birdDrift {
+      0%, 100% { transform: translateX(0) translateY(0); }
+      50% { transform: translateX(18px) translateY(-8px); }
+    }
+
+    @keyframes softRise {
+      0%, 100% { transform: translateY(0) scale(1); opacity: 0.1; }
+      50% { transform: translateY(-20px) scale(1.16); opacity: 0.4; }
+    }
+
+    .stats {
+      margin-top: -54px;
+      position: relative;
+      z-index: 4;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .stat-card,
+    .card,
+    .service-card,
+    .feature-card,
+    .gallery-card,
+    .contact-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+
+    .stat-card {
+      padding: 24px;
+    }
+
+    .stat-card .icon {
+      width: 50px;
+      height: 50px;
+      display: grid;
+      place-items: center;
+      border-radius: 16px;
+      background: rgba(31,122,63,0.08);
+      color: var(--primary);
+      margin-bottom: 18px;
+      font-size: 1.2rem;
+    }
+
+    .stat-card h3 {
+      font-size: 1.9rem;
+      margin: 0 0 4px;
+      color: var(--ink);
+      font-family: 'Manrope', sans-serif;
+    }
+
+    .stat-card p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .about-grid,
+    .contact-grid,
+    .footer-grid {
+      display: grid;
+      gap: 28px;
+      align-items: center;
+    }
+
+    .about-grid {
+      grid-template-columns: 0.95fr 1.05fr;
+    }
+
+    .about-images {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .about-images img {
+      border-radius: 24px;
+      height: 100%;
+      object-fit: cover;
+      min-height: 240px;
+      box-shadow: var(--shadow);
+    }
+
+    .about-images .tall {
+      grid-row: span 2;
+      min-height: 500px;
+    }
+
+    .card {
+      padding: 28px;
+    }
+
+    .bullet-list {
+      display: grid;
+      gap: 12px;
+      margin-top: 20px;
+    }
+
+    .bullet {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      line-height: 1.7;
+    }
+
+    .bullet i { color: var(--primary); margin-top: 6px; }
+
+    .services-grid,
+    .features-grid,
+    .gallery-grid,
+    .testimonials-grid {
+      display: grid;
+      gap: 20px;
+    }
+
+    .services-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    .features-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .gallery-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    .testimonials-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+
+    .service-card {
+      overflow: hidden;
+      transition: transform 0.28s ease, box-shadow 0.28s ease;
+    }
+
+    .service-card:hover,
+    .feature-card:hover,
+    .gallery-card:hover,
+    .contact-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 24px 54px rgba(12, 47, 22, 0.16);
+    }
+
+    .service-media {
+      aspect-ratio: 1.15 / 1;
+      overflow: hidden;
+    }
+
+    .service-media img,
+    .gallery-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s ease;
+    }
+
+    .service-card:hover img,
+    .gallery-card:hover img { transform: scale(1.06); }
+
+    .service-content { padding: 24px; }
+
+    .service-content h3,
+    .feature-card h3,
+    .testimonial-card h3,
+    .contact-card h3 {
+      margin: 0 0 12px;
+      color: var(--ink);
+      font-family: 'Manrope', sans-serif;
+    }
+
+    .service-content p,
+    .feature-card p,
+    .testimonial-card p,
+    .contact-card p,
+    .footer-about p,
+    .footer-links a,
+    .footer-bottom {
+      color: var(--muted);
+      line-height: 1.75;
+    }
+
+    .service-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 16px;
+    }
+
+    .tag {
+      padding: 7px 11px;
+      border-radius: 999px;
+      background: rgba(31,122,63,0.08);
+      color: var(--primary);
+      font-weight: 700;
+      font-size: 0.8rem;
+    }
+
+    .feature-card,
+    .testimonial-card,
+    .contact-card {
+      padding: 26px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      box-shadow: var(--shadow);
+      transition: transform 0.28s ease, box-shadow 0.28s ease;
+    }
+
+    .feature-icon,
+    .contact-icon {
+      width: 58px;
+      height: 58px;
+      display: grid;
+      place-items: center;
+      border-radius: 18px;
+      background: rgba(31,122,63,0.08);
+      color: var(--primary);
+      font-size: 1.3rem;
+      margin-bottom: 18px;
+    }
+
+    .gallery-card {
+      overflow: hidden;
+      position: relative;
+      min-height: 280px;
+    }
+
+    .gallery-card figcaption {
+      position: absolute;
+      left: 16px;
+      right: 16px;
+      bottom: 16px;
+      padding: 14px 16px;
+      border-radius: 16px;
+      background: rgba(10, 31, 15, 0.68);
+      color: #fff;
+      backdrop-filter: blur(8px);
+    }
+
+    .gallery-card strong {
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    .mini-banner {
+      background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+      color: #fff;
+      border-radius: 30px;
+      padding: 30px;
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 18px;
+      align-items: center;
+      box-shadow: var(--shadow);
+    }
+
+    .mini-banner p {
+      color: rgba(255,255,255,0.86);
+      margin: 0;
+      line-height: 1.8;
+    }
+
+    .cta-box {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      justify-content: flex-end;
+    }
+
+    .testimonial-card .stars {
+      color: var(--gold);
+      display: flex;
+      gap: 4px;
+      margin-bottom: 14px;
+    }
+
+    .testimonial-card small {
+      display: block;
+      margin-top: 16px;
+      color: var(--primary);
+      font-weight: 700;
+    }
+
+    .contact-grid {
+      grid-template-columns: 0.9fr 1.1fr;
+      align-items: start;
+    }
+
+    .contact-stack {
+      display: grid;
+      gap: 18px;
+    }
+
+    .contact-card a {
+      color: var(--primary-dark);
+      font-weight: 700;
+      word-break: break-word;
+    }
+
+    form.contact-form {
+      display: grid;
+      gap: 16px;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    input,
+    textarea,
+    select {
+      width: 100%;
+      border-radius: 16px;
+      border: 1px solid rgba(31,122,63,0.14);
+      background: rgba(255,255,255,0.92);
+      padding: 15px 16px;
+      font: inherit;
+      color: var(--ink);
+      outline: none;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    input:focus,
+    textarea:focus,
+    select:focus {
+      border-color: rgba(31,122,63,0.55);
+      box-shadow: 0 0 0 4px rgba(31,122,63,0.1);
+    }
+
+    textarea { min-height: 160px; resize: vertical; }
+
+    .map-card iframe {
+      width: 100%;
+      height: 320px;
+      border: 0;
+      border-radius: 24px;
+      box-shadow: var(--shadow);
+    }
+
+    .footer {
+      background: #102517;
+      color: #dce6df;
+      padding-top: 70px;
+    }
+
+    .footer-grid {
+      grid-template-columns: 1.1fr 0.7fr 0.8fr 1fr;
+      align-items: start;
+      padding-bottom: 36px;
+      gap: 26px;
+    }
+
+    .footer h4 {
+      margin: 0 0 14px;
+      color: #fff;
+      font-family: 'Manrope', sans-serif;
+      font-size: 1.05rem;
+    }
+
+    .footer-about .brand {
+      margin-bottom: 18px;
+    }
+
+    .footer-links {
+      display: grid;
+      gap: 10px;
+    }
+
+    .footer .social-links a,
+    .hero .social-links a {
+      width: 44px;
+      height: 44px;
+      display: grid;
+      place-items: center;
+      border-radius: 999px;
+      transition: transform 0.25s ease, background 0.25s ease;
+    }
+
+    .hero .social-links a {
+      background: rgba(255,255,255,0.12);
+      color: #fff;
+      border: 1px solid rgba(255,255,255,0.16);
+    }
+
+    .footer .social-links a {
+      background: rgba(255,255,255,0.08);
+      color: #fff;
+    }
+
+    .footer .social-links a:hover,
+    .hero .social-links a:hover {
+      transform: translateY(-3px);
+      background: var(--primary);
+    }
+
+    .footer-bottom {
+      border-top: 1px solid rgba(255,255,255,0.08);
+      padding: 20px 0 28px;
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+      font-size: 0.94rem;
+    }
+
+    [data-reveal] {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+
+    [data-reveal].visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .wa-float {
+      position: fixed;
+      right: 18px;
+      bottom: 18px;
+      z-index: 999;
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: #25D366;
+      color: #fff;
+      font-size: 1.55rem;
+      box-shadow: 0 16px 34px rgba(37, 211, 102, 0.32);
+    }
+
+    .hide-desktop { display: none; }
+
+    @media (max-width: 1100px) {
+      .hero-grid,
+      .about-grid,
+      .contact-grid,
+      .mini-banner,
+      .footer-grid,
+      .services-grid,
+      .features-grid,
+      .gallery-grid,
+      .testimonials-grid,
+      .stats-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .hero-grid,
+      .contact-grid,
+      .mini-banner { align-items: stretch; }
+    }
+
+    @media (max-width: 820px) {
+      .nav-links,
+      .nav-actions .btn-outline {
+        display: none;
+      }
+
+      .mobile-toggle,
+      .hide-desktop {
+        display: inline-grid;
+      }
+
+      .nav-links.open {
+        display: grid;
+        position: absolute;
+        top: calc(100% + 8px);
+        left: 16px;
+        right: 16px;
+        background: rgba(255,255,255,0.96);
+        border: 1px solid rgba(31,122,63,0.12);
+        border-radius: 24px;
+        padding: 18px;
+        box-shadow: var(--shadow);
+        backdrop-filter: blur(14px);
+      }
+
+      .hero,
+      .section { padding-top: 70px; }
+      .hero { min-height: auto; padding-bottom: 80px; }
+
+      .hero-grid,
+      .about-grid,
+      .contact-grid,
+      .mini-banner,
+      .footer-grid,
+      .services-grid,
+      .features-grid,
+      .gallery-grid,
+      .testimonials-grid,
+      .stats-grid,
+      .hero-badges,
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .about-images .tall { min-height: 320px; grid-row: span 1; }
+      .about-images img { min-height: 220px; }
+      .cta-box { justify-content: flex-start; }
+      .stats { margin-top: 0; }
+    }
+
+    @media (max-width: 560px) {
+      .container { width: min(100% - 22px, var(--max)); }
+      .nav { min-height: 74px; }
+      .hero h2 { font-size: clamp(2.4rem, 10vw, 4rem); }
+      .hero p,
+      .section-subtitle,
+      .service-content p,
+      .feature-card p,
+      .testimonial-card p,
+      .contact-card p { line-height: 1.7; }
+      .quote-card,
+      .card,
+      .service-content,
+      .feature-card,
+      .testimonial-card,
+      .contact-card,
+      .stat-card { padding: 22px; }
+      .mini-banner { padding: 24px; border-radius: 24px; }
+      .footer { padding-top: 54px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="container nav">
+      <a href="#home" class="brand" aria-label="Eco Friendly Tree Felling Pretoria home">
+        <div class="brand-badge"><i class="fa-solid fa-tree"></i></div>
+        <div>
+          <h1>Eco Friendly Tree Felling Pretoria <span>Tree care, clean spaces & greener gardens</span></h1>
+        </div>
+      </a>
+
+      <nav class="nav-links" id="mobileMenu">
+        <a href="#home">Home</a>
+        <a href="#about">About</a>
+        <a href="#services">Services</a>
+        <a href="#library">Library</a>
+        <a href="#contact">Contact</a>
+      </nav>
+
+      <div class="nav-actions">
+        <a class="btn btn-outline" href="tel:+27675712844"><i class="fa-solid fa-phone"></i> Call Now</a>
+        <a class="btn btn-primary" href="https://wa.me/27675712844?text=Hello%20Eco%20Friendly%20Tree%20Felling%20Pretoria%2C%20I%20would%20like%20a%20quote.">Get a Quote</a>
+        <button class="mobile-toggle" id="mobileToggle" aria-label="Open menu"><i class="fa-solid fa-bars"></i></button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero" id="home">
+      <div class="hero-slider" aria-hidden="true">
+        <div class="hero-slide"></div>
+        <div class="hero-slide"></div>
+        <div class="hero-slide"></div>
+        <div class="hero-slide"></div>
+        <div class="hero-slide"></div>
+        <div class="hero-slide"></div>
+        <div class="hero-slide"></div>
+        <div class="hero-slide"></div>
+        <div class="hero-slide"></div>
+      </div>
+
+      <div class="floating-elements" aria-hidden="true">
+        <i class="leaf fa-solid fa-leaf" style="top: 15%; left: 4%;"></i>
+        <i class="leaf fa-solid fa-seedling" style="top: 28%; right: 8%; animation-duration: 12s;"></i>
+        <i class="leaf fa-solid fa-leaf" style="bottom: 16%; left: 10%; animation-duration: 9s;"></i>
+        <i class="bird fa-solid fa-dove" style="top: 18%; right: 19%;"></i>
+        <i class="bird fa-solid fa-feather-pointed" style="top: 60%; right: 10%; animation-duration: 14s;"></i>
+        <span class="bubble" style="left: 34%; bottom: 14%;"></span>
+        <span class="bubble" style="right: 30%; top: 18%; animation-duration: 10s;"></span>
+      </div>
+
+      <div class="container hero-grid">
+        <div class="hero-copy" data-reveal>
+          <div class="eyebrow"><i class="fa-solid fa-shield-heart"></i> Safe, reliable and eco-conscious outdoor services in Pretoria</div>
+          <h2>Professional tree felling & garden care that leaves your property cleaner, safer and greener.</h2>
+          <p>
+            We help homeowners, estates, offices and businesses across Pretoria with expert tree felling, stump removals,
+            refuse removals and gardening services. From hazardous tree removals to neat weekly garden maintenance, our team
+            focuses on safety, tidy workmanship and environmentally responsible clean-up.
+          </p>
+
+          <div class="hero-actions">
+            <a class="btn btn-primary" href="https://wa.me/27675712844?text=Hello%20Eco%20Friendly%20Tree%20Felling%20Pretoria%2C%20please%20send%20me%20a%20quote."><i class="fa-brands fa-whatsapp"></i> WhatsApp Us</a>
+            <a class="btn btn-outline" href="#services"><i class="fa-solid fa-arrow-right"></i> Explore Services</a>
+          </div>
+
+          <div class="hero-badges">
+            <div class="hero-badge">
+              <strong>10+ Years</strong>
+              <span>Practical experience serving Pretoria properties with dependable outdoor solutions.</span>
+            </div>
+            <div class="hero-badge">
+              <strong>Fast Response</strong>
+              <span>Quick quotes and efficient scheduling for urgent or planned work.</span>
+            </div>
+            <div class="hero-badge">
+              <strong>Eco-Friendly Approach</strong>
+              <span>We prioritise neat disposal, responsible debris handling and site respect.</span>
+            </div>
+          </div>
+        </div>
+
+        <aside class="quote-card" data-reveal>
+          <h3>Why Pretoria chooses us</h3>
+          <p>
+            Tree and garden work in Pretoria needs a team that understands local conditions, seasonal growth and the importance of a safe, tidy finish.
+          </p>
+          <div class="quote-list">
+            <div class="quote-item">
+              <i class="fa-solid fa-check"></i>
+              <div><strong>Risk-aware tree removal</strong><br>Careful cutting and sectional dismantling for confined residential spaces.</div>
+            </div>
+            <div class="quote-item">
+              <i class="fa-solid fa-check"></i>
+              <div><strong>Stumps and roots cleared</strong><br>We help remove the remains that make lawns, paving and new landscaping difficult.</div>
+            </div>
+            <div class="quote-item">
+              <i class="fa-solid fa-check"></i>
+              <div><strong>Refuse removed properly</strong><br>Green waste, branches and garden rubble are loaded and taken away neatly.</div>
+            </div>
+          </div>
+          <a class="btn btn-primary" style="width:100%;" href="tel:+27675712844"><i class="fa-solid fa-phone-volume"></i> 067 571 2844</a>
+          <div class="quote-mini">
+            <span><i class="fa-solid fa-location-dot"></i> Atterbury Rd, Pretoria East</span>
+            <span><i class="fa-solid fa-envelope"></i> Email support</span>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <section class="stats">
+      <div class="container stats-grid">
+        <div class="stat-card" data-reveal>
+          <div class="icon"><i class="fa-solid fa-tree-city"></i></div>
+          <h3>Tree Felling</h3>
+          <p>Safe removals for damaged, overgrown, invasive or high-risk trees.</p>
+        </div>
+        <div class="stat-card" data-reveal>
+          <div class="icon"><i class="fa-solid fa-hammer"></i></div>
+          <h3>Stump Removal</h3>
+          <p>Cleaner outdoor spaces with stumps and root obstacles taken out.</p>
+        </div>
+        <div class="stat-card" data-reveal>
+          <div class="icon"><i class="fa-solid fa-truck-ramp-box"></i></div>
+          <h3>Refuse Removal</h3>
+          <p>Branches, hedge cuttings, garden waste and rubble loaded and removed.</p>
+        </div>
+        <div class="stat-card" data-reveal>
+          <div class="icon"><i class="fa-solid fa-seedling"></i></div>
+          <h3>Gardening</h3>
+          <p>Lawn care, bed clean-ups, pruning and regular maintenance packages.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="about">
+      <div class="container about-grid">
+        <div class="about-images" data-reveal>
+          <img src="2.jpg" alt="Tree felling service in Pretoria" class="tall">
+          <img src="grass2.jpeg" alt="Well-kept green lawn and gardening service">
+          <img src="Boston.webp" alt="Outdoor clean-up and landscaping results">
+        </div>
+
+        <div data-reveal>
+          <div class="section-kicker">About Us</div>
+          <h2 class="section-title">Over ten years of practical outdoor service experience in Pretoria.</h2>
+          <p class="section-subtitle">
+            Eco Friendly Tree Felling Pretoria is a Pretoria-based outdoor service team focused on safe tree work, cleaner properties and attractive gardens.
+            We work with homeowners, complexes, rental properties and businesses that need reliable help with tree felling, stump clearing, refuse removal and garden maintenance.
+          </p>
+
+          <div class="card">
+            <p style="margin-top:0; line-height:1.85; color: var(--text);">
+              Our approach is built around careful planning, tidy execution and a strong respect for the environment around every site. We aim to reduce unnecessary damage,
+              separate green waste where possible, and leave spaces safer and easier to use after the job is done. Whether a client needs one dangerous tree removed,
+              a neglected yard restored, or routine gardening support, we deliver practical solutions backed by workmanship and responsive service.
+            </p>
+            <div class="bullet-list">
+              <div class="bullet"><i class="fa-solid fa-leaf"></i><div><strong>Eco-minded service:</strong> sensible waste handling, neat site clean-up and a greener mindset on every job.</div></div>
+              <div class="bullet"><i class="fa-solid fa-shield"></i><div><strong>Safety first:</strong> especially important for trees near walls, roofs, driveways, fences or power-sensitive areas.</div></div>
+              <div class="bullet"><i class="fa-solid fa-thumbs-up"></i><div><strong>Detail focused:</strong> we do not just cut and leave — we aim to restore order and improve the look of your property.</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="services" style="background: linear-gradient(180deg, rgba(31,122,63,0.04), rgba(255,255,255,0));">
+      <div class="container">
+        <div class="section-kicker" data-reveal>Our Services</div>
+        <h2 class="section-title" data-reveal>Professional solutions for trees, garden waste and outdoor maintenance.</h2>
+        <p class="section-subtitle" data-reveal>
+          We built this service offering around what Pretoria properties commonly need most: safe tree removal, stump clearing, reliable refuse disposal and regular gardening support.
+        </p>
+
+        <div class="services-grid">
+          <article class="service-card" data-reveal>
+            <div class="service-media"><img src="3.jpg" alt="Large tree being cut safely"></div>
+            <div class="service-content">
+              <h3>Tree Felling</h3>
+              <p>
+                We remove unwanted, storm-damaged, dead, diseased or dangerously positioned trees with a focus on safety and controlled dismantling.
+                This service is ideal when branches threaten structures, roots affect paving, or a tree has outgrown the available space.
+              </p>
+              <div class="service-tags">
+                <span class="tag">Risk reduction</span>
+                <span class="tag">Controlled cutting</span>
+                <span class="tag">Site clean-up</span>
+              </div>
+            </div>
+          </article>
+
+          <article class="service-card" data-reveal>
+            <div class="service-media"><img src="1.jpg" alt="Tree stump removal work"></div>
+            <div class="service-content">
+              <h3>Tree Stump Removals</h3>
+              <p>
+                Leftover stumps can be unsightly, create trip hazards and make future landscaping difficult. We help remove stumps so that lawns,
+                paving, planting and general use of the space can continue without obstruction.
+              </p>
+              <div class="service-tags">
+                <span class="tag">Clearer lawns</span>
+                <span class="tag">Safer pathways</span>
+                <span class="tag">Better replanting</span>
+              </div>
+            </div>
+          </article>
+
+          <article class="service-card" data-reveal>
+            <div class="service-media"><img src="5.webp" alt="Refuse and garden waste removal"></div>
+            <div class="service-content">
+              <h3>Refuse Removals</h3>
+              <p>
+                We remove garden refuse, tree branches, cuttings, shrub waste and general outdoor debris to help restore order quickly.
+                This is a useful service after tree work, seasonal clean-ups, renovations or when a property needs a fresh start.
+              </p>
+              <div class="service-tags">
+                <span class="tag">Garden waste</span>
+                <span class="tag">Rubble clear-outs</span>
+                <span class="tag">Neat disposal</span>
+              </div>
+            </div>
+          </article>
+
+          <article class="service-card" data-reveal>
+            <div class="service-media"><img src="grass1.jpeg" alt="Garden maintenance and lawn care"></div>
+            <div class="service-content">
+              <h3>Gardening Services</h3>
+              <p>
+                Our gardening services include lawn care, pruning, trimming, bed clean-ups, seasonal tidying and general landscape maintenance.
+                We help keep gardens healthy, neat and presentable for homes, businesses and managed properties.
+              </p>
+              <div class="service-tags">
+                <span class="tag">Lawn care</span>
+                <span class="tag">Pruning</span>
+                <span class="tag">Routine maintenance</span>
+              </div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <div class="section-kicker" data-reveal>Why Work With Us</div>
+        <h2 class="section-title" data-reveal>Built for Pretoria homes, gardens and commercial spaces.</h2>
+        <p class="section-subtitle" data-reveal>
+          Pretoria’s summer-rainfall climate and periods of heat can drive strong seasonal growth, while the wider Highveld also experiences winter frost in many areas.
+          That mix makes regular pruning, clean-ups and practical plant care important for healthy, manageable gardens. We design our work around those conditions. citeturn262417search1turn262417search4
+        </p>
+
+        <div class="features-grid">
+          <div class="feature-card" data-reveal>
+            <div class="feature-icon"><i class="fa-solid fa-recycle"></i></div>
+            <h3>Eco-conscious clean-up</h3>
+            <p>We aim for responsible handling of branches, green waste and site debris so clients get a cleaner property and a lower-impact finish.</p>
+          </div>
+          <div class="feature-card" data-reveal>
+            <div class="feature-icon"><i class="fa-solid fa-house-circle-check"></i></div>
+            <h3>Residential & business support</h3>
+            <p>From private gardens to office properties, we provide practical outdoor work that improves safety, access and appearance.</p>
+          </div>
+          <div class="feature-card" data-reveal>
+            <div class="feature-icon"><i class="fa-solid fa-clock"></i></div>
+            <h3>Quick turnaround</h3>
+            <p>We understand that dangerous trees, excess waste and overgrown spaces often need urgent attention, not a long waiting period.</p>
+          </div>
+          <div class="feature-card" data-reveal>
+            <div class="feature-icon"><i class="fa-solid fa-person-digging"></i></div>
+            <h3>More than cutting trees</h3>
+            <p>We also help with stump removal, garden restoration and refuse collection so the site feels complete when we leave.</p>
+          </div>
+          <div class="feature-card" data-reveal>
+            <div class="feature-icon"><i class="fa-solid fa-dumpster"></i></div>
+            <h3>Neat waste handling matters</h3>
+            <p>Tshwane residents rely on structured waste collection and dedicated refuse facilities, so tidy disposal and the right handling of garden waste are important. citeturn239110search1turn239110search3turn239110search6</p>
+          </div>
+          <div class="feature-card" data-reveal>
+            <div class="feature-icon"><i class="fa-solid fa-award"></i></div>
+            <h3>Experienced workmanship</h3>
+            <p>With more than a decade of experience, we bring practical problem-solving and a better understanding of what each outdoor space needs.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="library" style="background: linear-gradient(180deg, rgba(31,122,63,0.03), rgba(255,255,255,0));">
+      <div class="container">
+        <div class="section-kicker" data-reveal>Library</div>
+        <h2 class="section-title" data-reveal>Recent work, service inspiration and outdoor project gallery.</h2>
+        <p class="section-subtitle" data-reveal>
+          This visual library is designed to showcase the kind of work Eco Friendly Tree Felling Pretoria can do across tree care, clean-ups and gardening.
+          Replace or expand these images any time as the portfolio grows.
+        </p>
+
+        <div class="gallery-grid">
+          <figure class="gallery-card" data-reveal>
+            <img src="2.jpg" alt="Tree removal project example">
+            <figcaption><strong>Tree removal</strong><span>Safe cutting, branch control and clean site finish.</span></figcaption>
+          </figure>
+          <figure class="gallery-card" data-reveal>
+            <img src="grass1.jpeg" alt="Fresh green lawn service">
+            <figcaption><strong>Garden restoration</strong><span>Lawn care and outdoor space improvement.</span></figcaption>
+          </figure>
+          <figure class="gallery-card" data-reveal>
+            <img src="grass2.jpeg" alt="Garden maintenance result">
+            <figcaption><strong>Routine maintenance</strong><span>Reliable trimming, clearing and garden upkeep.</span></figcaption>
+          </figure>
+          <figure class="gallery-card" data-reveal>
+            <img src="1.jpg" alt="Stump removal work">
+            <figcaption><strong>Stump clearing</strong><span>Open up the area for re-use, paving or planting.</span></figcaption>
+          </figure>
+          <figure class="gallery-card" data-reveal>
+            <img src="5.webp" alt="Refuse removal after garden work">
+            <figcaption><strong>Refuse removal</strong><span>Debris, cuttings and garden waste taken away.</span></figcaption>
+          </figure>
+          <figure class="gallery-card" data-reveal>
+            <img src="7webp" alt="Outdoor service project in progress">
+            <figcaption><strong>On-site teamwork</strong><span>Efficient support for residential and business properties.</span></figcaption>
+          </figure>
+          <figure class="gallery-card" data-reveal>
+            <img src="unnamed.webp" alt="Landscaping and tidy outdoor space">
+            <figcaption><strong>Clean final result</strong><span>A tidier, safer and more attractive property.</span></figcaption>
+          </figure>
+          <figure class="gallery-card" data-reveal>
+            <img src="Boston.webp" alt="Tree and garden service gallery item">
+            <figcaption><strong>Eco-minded care</strong><span>Outdoor services that balance function and appearance.</span></figcaption>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <div class="mini-banner" data-reveal>
+          <div>
+            <h2 style="margin: 0 0 10px; font-family: 'Manrope', sans-serif;">Need a quote for tree felling, stump removal or garden work?</h2>
+            <p>Send us photos on WhatsApp for a faster response, or use the contact form below to tell us what you need done.</p>
+          </div>
+          <div class="cta-box">
+            <a class="btn btn-primary" href="https://wa.me/27675712844?text=Hello%20Eco%20Friendly%20Tree%20Felling%20Pretoria%2C%20I%20need%20help%20with%20my%20property."><i class="fa-brands fa-whatsapp"></i> WhatsApp</a>
+            <a class="btn btn-outline" style="background: rgba(255,255,255,0.15); color:#fff; border-color: rgba(255,255,255,0.16);" href="mailto:andrewtreefellingservices@gmail.com"><i class="fa-solid fa-envelope"></i> Email Us</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <div class="section-kicker" data-reveal>What clients value</div>
+        <h2 class="section-title" data-reveal>A service style built around responsiveness, neatness and trust.</h2>
+        <div class="testimonials-grid">
+          <div class="testimonial-card" data-reveal>
+            <div class="stars"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+            <h3>Safe tree work</h3>
+            <p>Clients want a team that understands how to remove trees near homes, walls, fences and paved areas without creating extra damage.</p>
+            <small>Ideal for tight residential spaces</small>
+          </div>
+          <div class="testimonial-card" data-reveal>
+            <div class="stars"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+            <h3>Cleaner finishes</h3>
+            <p>Outdoor work feels complete when the branches, leaves, waste and rubble are cleared properly and the site is left looking presentable.</p>
+            <small>Perfect after removals and big garden clean-ups</small>
+          </div>
+          <div class="testimonial-card" data-reveal>
+            <div class="stars"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+            <h3>One team, multiple services</h3>
+            <p>Tree felling, stump removal, refuse collection and gardening support in one place makes maintenance easier for busy property owners.</p>
+            <small>Convenient for homes, estates and businesses</small>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="contact" style="background: linear-gradient(180deg, rgba(31,122,63,0.04), rgba(255,255,255,0));">
+      <div class="container contact-grid">
+        <div data-reveal>
+          <div class="section-kicker">Contact Us</div>
+          <h2 class="section-title">Get in touch for a fast quote in Pretoria.</h2>
+          <p class="section-subtitle">
+            Contact us by phone, email or WhatsApp. You can also use the contact form and your default email app will open a pre-filled message addressed to the business email.
+          </p>
+
+          <div class="contact-stack">
+            <div class="contact-card">
+              <div class="contact-icon"><i class="fa-solid fa-location-dot"></i></div>
+              <h3>Address</h3>
+              <p>Atterbury Rd, Pretoria East, Pretoria<br>0081</p>
+            </div>
+
+            <div class="contact-card">
+              <div class="contact-icon"><i class="fa-solid fa-phone-volume"></i></div>
+              <h3>Call / WhatsApp</h3>
+              <p><a href="tel:+27675712844">Phone: 067 571 2844</a><br><a href="https://wa.me/27675712844?text=Hello%20Eco%20Friendly%20Tree%20Felling%20Pretoria">WhatsApp: 067 571 2844</a></p>
+            </div>
+
+            <div class="contact-card">
+              <div class="contact-icon"><i class="fa-solid fa-envelope"></i></div>
+              <h3>Email</h3>
+              <p><a href="mailto:andrewtreefellingservices@gmail.com">andrewtreefellingservices@gmail.com</a></p>
+            </div>
+          </div>
+        </div>
+
+        <div data-reveal>
+          <div class="card" style="margin-bottom: 20px;">
+            <form class="contact-form" id="contactForm">
+              <div class="form-grid">
+                <input type="text" id="name" placeholder="Your full name" required>
+                <input type="tel" id="phone" placeholder="Your phone number" required>
+              </div>
+              <div class="form-grid">
+                <input type="email" id="email" placeholder="Your email address" required>
+                <select id="service" required>
+                  <option value="">Select a service</option>
+                  <option>Tree Felling</option>
+                  <option>Tree Stump Removals</option>
+                  <option>Refuse Removals</option>
+                  <option>Gardening Services</option>
+                  <option>Multiple Services</option>
+                </select>
+              </div>
+              <textarea id="message" placeholder="Tell us about the job, your location and when you need assistance." required></textarea>
+              <button class="btn btn-primary" type="submit"><i class="fa-solid fa-paper-plane"></i> Send Enquiry</button>
+              <small style="color: var(--muted); line-height: 1.7;">This website uses your email app to send the message directly to <strong>andrewtreefellingservices@gmail.com</strong>.</small>
+            </form>
+          </div>
+
+          <div class="map-card">
+            <iframe src="https://www.google.com/maps?q=Atterbury%20Rd,%20Pretoria%20East,%20Pretoria%200081&output=embed" allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="Map for Atterbury Rd, Pretoria East, Pretoria 0081"></iframe>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer-grid">
+      <div class="footer-about">
+        <div class="brand">
+          <div class="brand-badge"><i class="fa-solid fa-tree"></i></div>
+          <div>
+            <h1 style="color:#fff;">Eco Friendly Tree Felling Pretoria <span style="color:#b5c8ba;">Outdoor care with a cleaner finish</span></h1>
+          </div>
+        </div>
+        <p>
+          Professional tree felling, stump removals, refuse removals and gardening services in Pretoria East and surrounding areas.
+        </p>
+        <div class="social-links" style="margin-top: 18px;">
+          <a href="https://wa.me/27675712844?text=Hello%20Eco%20Friendly%20Tree%20Felling%20Pretoria" aria-label="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>
+          <a href="mailto:andrewtreefellingservices@gmail.com" aria-label="Email"><i class="fa-solid fa-envelope"></i></a>
+          <a href="https://www.facebook.com/ecoboomsloping/" target="_blank" rel="noopener" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+          <a href="https://andrewtreefellingservices-pretoriaeast.com/" target="_blank" rel="noopener" aria-label="Website"><i class="fa-solid fa-globe"></i></a>
+        </div>
+      </div>
+
+      <div>
+        <h4>Quick Links</h4>
+        <div class="footer-links">
+          <a href="#home">Home</a>
+          <a href="#about">About Us</a>
+          <a href="#services">Services</a>
+          <a href="#library">Library</a>
+          <a href="#contact">Contact</a>
+        </div>
+      </div>
+
+      <div>
+        <h4>Services</h4>
+        <div class="footer-links">
+          <a href="#services">Tree Felling</a>
+          <a href="#services">Stump Removals</a>
+          <a href="#services">Refuse Removals</a>
+          <a href="#services">Gardening Services</a>
+        </div>
+      </div>
+
+      <div>
+        <h4>Contact Info</h4>
+        <div class="footer-links">
+          <a href="tel:+27675712844">Phone: 067 571 2844</a>
+          <a href="mailto:andrewtreefellingservices@gmail.com">andrewtreefellingservices@gmail.com</a>
+          <a href="#contact">Atterbury Rd, Pretoria East, Pretoria 0081</a>
+          <a href="https://wa.me/27675712844?text=Hello%20Eco%20Friendly%20Tree%20Felling%20Pretoria">WhatsApp Us</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="container footer-bottom">
+      <span>© <span id="year"></span> Eco Friendly Tree Felling Pretoria. All rights reserved.</span>
+      <span>Designed for modern mobile and desktop browsing.</span>
+    </div>
+  </footer>
+
+  <a class="wa-float" href="https://wa.me/27675712844?text=Hello%20Eco%20Friendly%20Tree%20Felling%20Pretoria%2C%20I%20need%20a%20quote." aria-label="WhatsApp floating button">
+    <i class="fa-brands fa-whatsapp"></i>
+  </a>
+
+  <script>
+    const mobileToggle = document.getElementById('mobileToggle');
+    const mobileMenu = document.getElementById('mobileMenu');
+    mobileToggle?.addEventListener('click', () => mobileMenu.classList.toggle('open'));
+
+    document.querySelectorAll('#mobileMenu a').forEach(link => {
+      link.addEventListener('click', () => mobileMenu.classList.remove('open'));
+    });
+
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    const revealEls = document.querySelectorAll('[data-reveal]');
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          revealObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.14 });
+    revealEls.forEach(el => revealObserver.observe(el));
+
+    document.getElementById('contactForm').addEventListener('submit', function (e) {
+      e.preventDefault();
+      const name = document.getElementById('name').value.trim();
+      const phone = document.getElementById('phone').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const service = document.getElementById('service').value.trim();
+      const message = document.getElementById('message').value.trim();
+
+      const subject = encodeURIComponent(`Website enquiry: ${service || 'Service Request'}`);
+      const body = encodeURIComponent(
+`Name: ${name}
+Phone: ${phone}
+Email: ${email}
+Service: ${service}
+
+Message:
+${message}`
+      );
+      window.location.href = `mailto:andrewtreefellingservices@gmail.com?subject=${subject}&body=${body}`;
+    });
+  </script>
+</body>
+</html>
